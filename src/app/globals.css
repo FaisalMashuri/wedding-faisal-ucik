@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   DESIGN SYSTEM — Wedding
+   Primary   : #D6CC89 (soft gold)
+   Secondary : #3C6874 (deep teal)
+   Fonts     : Alice (serif) · Montserrat (sans) · Beau Rivage (script)
+   ===================================================================== */
+
+:root {
+  /* Brand */
+  --color-primary: #d6cc89;
+  --color-primary-light: #e7e0b6;
+  --color-primary-dark: #b8ac5f;
+  --color-on-primary: #33301c; /* teks di atas primary */
+
+  --color-secondary: #3c6874;
+  --color-secondary-light: #5a8894;
+  --color-secondary-dark: #294a53;
+  --color-on-secondary: #f5f3e7; /* teks di atas secondary */
+
+  /* Netral / permukaan */
+  --color-cream: #f7f4ea;
+  --color-ink: #2a2e2e;
+  --color-muted: #6b7176;
+
+  /* Semantik dasar */
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+}
+
+@theme inline {
+  /* Warna → menghasilkan util: bg-*, text-*, border-*, dll. */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-on-primary: var(--color-on-primary);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-light: var(--color-secondary-light);
+  --color-secondary-dark: var(--color-secondary-dark);
+  --color-on-secondary: var(--color-on-secondary);
+
+  --color-cream: var(--color-cream);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+
+  /* Font → menghasilkan util: font-serif, font-sans, font-script */
+  --font-serif: var(--font-alice);
+  --font-sans: var(--font-montserrat);
+  --font-script: var(--font-beau-rivage);
+  --font-subrayada: var(--font-montserrat-subrayada);
+  --font-counter: var(--font-alike);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+/* =====================================================================
+   ANIMASI ONBOARDING (entrance saat load pertama)
+   ===================================================================== */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.18);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes soft-glow {
+  0%,
+  100% {
+    box-shadow: 0 10px 26px -10px rgba(214, 204, 137, 0.5);
+  }
+  50% {
+    box-shadow: 0 12px 38px -8px rgba(214, 204, 137, 0.9);
+  }
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Elemen mulai tersembunyi, lalu muncul naik-halus */
+.anim-fade-up {
+  opacity: 0;
+  animation: fade-up 1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.anim-ken-burns {
+  animation: ken-burns 9s ease-out both;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.anim-overlay {
+  animation: overlay-in 1.4s ease-out both;
+}
+
+.anim-glow {
+  animation: soft-glow 2.8s ease-in-out infinite;
+  /* jeda agar glow mulai setelah tombol selesai muncul */
+  animation-delay: 1.6s;
+}
+
+/* Hormati preferensi kurangi-gerak */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up,
+  .anim-ken-burns,
+  .anim-overlay,
+  .anim-glow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
