@@ -105,6 +105,28 @@ body {
   }
 }
 
+/* Ring monogram muncul: mengecil → normal + fade */
+@keyframes ring-in {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Kilau emas menyapu teks nama */
+@keyframes shimmer-gold {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
 /* Elemen mulai tersembunyi, lalu muncul naik-halus */
 .anim-fade-up {
   opacity: 0;
@@ -119,6 +141,30 @@ body {
 
 .anim-overlay {
   animation: overlay-in 1.4s ease-out both;
+}
+
+/* Ring: masuk sekali (mengecil→normal), lalu glow lembut berulang */
+.anim-ring {
+  animation:
+    ring-in 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both,
+    soft-glow 3s ease-in-out 0.9s infinite;
+}
+
+.shimmer-gold {
+  background: linear-gradient(
+    100deg,
+    #b8ac5f 0%,
+    #d6cc89 38%,
+    #fff6d6 50%,
+    #d6cc89 62%,
+    #b8ac5f 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-gold 3.2s ease-in-out infinite;
 }
 
 .anim-glow {
@@ -136,5 +182,15 @@ body {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .anim-ring {
+    animation: none;
+  }
+
+  .shimmer-gold {
+    animation: none;
+    color: var(--color-primary);
+    -webkit-text-fill-color: var(--color-primary);
   }
 }

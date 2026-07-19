@@ -60,7 +60,7 @@ export function CoupleSection() {
     <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[9/16]">
         <Image
-          src="/images/bg-event.png"
+          src="/images/bg-couple.png"
           alt=""
           fill
           unoptimized
@@ -69,40 +69,40 @@ export function CoupleSection() {
         />
 
         {/* Konten di dalam kotak putih */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-12 text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-start pt-24 px-16 text-center">
           <p className="font-sans text-[16px] font-bold leading-snug text-primary-dark">
             You are Invited to
             <br />
             The Wedding of:
           </p>
 
-          <div className="mt-5">
+          <div className="mt-20">
             <Person p={bride} />
           </div>
 
-          <p className="my-1 font-script text-[34px] leading-none text-secondary">
+          <p className="my-5 font-script text-[34px] leading-none text-secondary">
             &amp;
           </p>
 
           <Person p={groom} />
 
           {/* Save the date */}
-          <p className="mt-6 font-script text-[26px] leading-none text-secondary">
+          <p className="mt-20 font-serif text-[26px] leading-none text-secondary">
             Save the date
           </p>
 
           <div className="mt-2 flex items-center gap-3 text-secondary">
-            <span className="font-sans text-[18px]">{d.day}</span>
+            <span className="font-sans text-[30px]">{d.day}</span>
             <span className="h-8 w-px bg-secondary/40" />
             <span className="font-sans text-[30px] font-bold leading-none">
               {d.date}
             </span>
             <span className="h-8 w-px bg-secondary/40" />
-            <span className="font-sans text-[18px]">{d.month}</span>
+            <span className="font-sans text-[30px]">{d.month}</span>
           </div>
 
-          <p className="mt-1.5 font-sans text-[14px] font-bold tracking-[0.2em] text-primary-dark">
-            {d.year}
+          <p className="mt-1.5 font-sans text-[14px] font-bold text-secondary">
+            {d.year} at 09.30 a.m
           </p>
         </div>
       </div>

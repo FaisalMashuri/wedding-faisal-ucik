@@ -4,10 +4,10 @@ import { Countdown } from "./Countdown";
 
 type Schedule = { title: string; time: string; location: string };
 
-/** Isi satu kartu acara. */
+/** Isi satu kartu acara — kartu putih berdiri sendiri (bukan lagi kotak di background). */
 function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
   return (
-    <div className="flex flex-col px-[19%] text-secondary">
+    <div className="flex w-full flex-col items-center rounded-[28px] border-2 border-primary bg-white px-6 py-7 text-secondary">
       <h3 className="text-center font-script text-[26px] leading-none underline decoration-secondary/50 decoration-1 underline-offset-[6px]">
         {e.title}
       </h3>
@@ -19,7 +19,9 @@ function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
       <p className="mt-4 font-sans text-[12px] font-bold text-primary-dark">
         Location:
       </p>
-      <p className="font-sans text-[12px] leading-relaxed">{e.location}</p>
+      <p className="text-center font-sans text-[12px] leading-relaxed">
+        {e.location}
+      </p>
 
       {mapUrl && (
         <a
@@ -47,11 +49,9 @@ function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
 }
 
 /**
- * Event section — detail acara (2 kartu) + countdown, full satu layar.
- * Background: /images/bg-event2.png (frame 9:16, 2 kotak putih).
- * Kotak atas  : 4%–34%    -> Akad
- * Kotak bawah : 38.5%–72% -> Reception (+ tombol Google Map)
- * Countdown   : area teal ~73%
+ * Event section — countdown + detail acara (2 kartu), lebih panjang dari section lain.
+ * Background: /images/bg-save-the-date.png (frame ~1080x2510, ilustrasi pasangan di atas,
+ * area teal polos di tengah-bawah untuk konten).
  *
  * KNOB edit sendiri: isi acara & link map -> src/config/wedding.ts (`schedule`, `mapUrl`)
  */
@@ -59,10 +59,10 @@ export function EventSection() {
   const [akad, reception] = wedding.schedule;
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#30535d]">
-      <div className="relative w-full aspect-[9/16]">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
+      <div className="relative w-full aspect-[1080/2515]">
         <Image
-          src="/images/bg-event2.png"
+          src="/images/bg-save-the-date.png"
           alt=""
           fill
           unoptimized
@@ -70,19 +70,22 @@ export function EventSection() {
           className="object-cover"
         />
 
-        {/* Kartu atas — Akad (kotak 4%–34%) */}
-        <div className="absolute inset-x-0 top-[4%] flex h-[30%] items-center justify-center">
-          <EventCard e={akad} />
-        </div>
-
-        {/* Kartu bawah — Reception (kotak 38.5%–72%) */}
-        <div className="absolute inset-x-0 top-[38.5%] flex h-[33.5%] items-center justify-center">
-          <EventCard e={reception} mapUrl={wedding.mapUrl} />
-        </div>
-
-        {/* Countdown (area teal bawah) */}
-        <div className="absolute inset-x-0 top-[74%] flex justify-center">
+        {/* Konten — mengalir di bawah ilustrasi pasangan */}
+        <div className="absolute inset-x-0 top-[24%] flex flex-col items-center px-8">
           <Countdown />
+
+          <p className="mt-6 w-full text-center font-sans text-[14px] leading-relaxed text-white/90 font-bold">
+            By the grace of God, we request the honour of your presence at
+            the marriage of our children :
+          </p>
+
+          <div className="mt-7 w-full">
+            <EventCard e={akad} />
+          </div>
+
+          <div className="mt-6 w-full">
+            <EventCard e={reception} mapUrl={wedding.mapUrl} />
+          </div>
         </div>
       </div>
     </section>

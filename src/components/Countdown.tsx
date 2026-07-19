@@ -16,11 +16,13 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 function Unit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex w-9 flex-col items-center">
-      <div className="flex h-6 items-center font-[family-name:var(--font-counter)] text-[20px] leading-none text-secondary">
+    <div className="flex w-11 flex-col items-center">
+      <div className="flex h-8 items-center font-[family-name:var(--font-counter)] text-[26px] leading-none text-secondary">
         {pad(value)}
       </div>
-      <span className="mt-1 font-sans text-[7px] text-primary">{label}</span>
+      <span className="mt-1.5 font-sans text-[8px] text-primary">
+        {label}
+      </span>
     </div>
   );
 }
@@ -28,7 +30,7 @@ function Unit({ value, label }: { value: number; label: string }) {
 /** Pemisah ":" sejajar tengah angka. */
 function Sep() {
   return (
-    <div className="flex h-6 items-center font-[family-name:var(--font-counter)] text-[14px] text-primary">
+    <div className="flex h-8 items-center font-[family-name:var(--font-counter)] text-[18px] text-primary">
       :
     </div>
   );
@@ -48,10 +50,10 @@ export function Countdown() {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="font-[family-name:var(--font-counter)] text-[14px] text-white">
+      <p className="font-[family-name:var(--font-counter)] text-[30px] text-white">
         Counting The Days
       </p>
-      <div className="mt-2 flex items-start gap-1.5 rounded-lg bg-white/95 px-4 py-2 shadow-sm">
+      <div className="mt-[clamp(8px,2vw,12px)] flex w-full items-start justify-center gap-3 rounded-2xl bg-white/95 px-6 py-4 shadow-sm">
         <Unit value={t.d} label="Days" />
         <Sep />
         <Unit value={t.h} label="Hours" />

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
+import { SplashScreen } from "@/components/SplashScreen";
 import { HeroSection } from "@/components/HeroSection";
 import { CoupleSection } from "@/components/CoupleSection";
 import { EventSection } from "@/components/EventSection";
@@ -33,6 +34,9 @@ export default function Home() {
 
   return (
     <main className="relative h-full">
+      {/* Loading screen — tampil dulu, lalu fade-out ke onboarding */}
+      <SplashScreen />
+
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
       <div
         className={`h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
@@ -77,7 +81,7 @@ export default function Home() {
           </p>
 
           <h1
-            className="anim-fade-up mt-2 font-serif text-[46px] font-normal leading-[1.1] text-white drop-shadow-sm"
+            className="anim-fade-up mt-2 font-serif text-[46px] font-normal leading-[1.1] text-primary drop-shadow-sm"
             style={{ animationDelay: "0.75s" }}
           >
             {wedding.coupleShort}
