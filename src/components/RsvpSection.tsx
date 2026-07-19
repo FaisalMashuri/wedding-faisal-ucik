@@ -95,7 +95,7 @@ export function RsvpSection() {
     "w-full rounded-lg bg-white px-3 py-2 font-sans text-[12px] text-secondary placeholder:text-secondary/40 focus:outline-none";
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-rsvp.png"
@@ -162,7 +162,7 @@ export function RsvpSection() {
           </form>
 
           {/* Daftar ucapan — scroll internal, tidak melebihi frame */}
-          <div className="mt-3 flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto pr-1">
+          <div className="no-scrollbar mt-3 flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto pr-1">
             {wishes.map((w, i) => (
               <div key={i} className="shrink-0 rounded-xl bg-white p-3 shadow-sm">
                 <p className="font-sans text-[13px] font-bold text-secondary">

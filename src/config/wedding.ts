@@ -2,7 +2,7 @@
 export const wedding = {
   groom: "Faisal",
   bride: "Ucik",
-  coupleShort: "Faisal & Ucik",
+  coupleShort: "Ucik & Faisal",
   // Inisial pasangan (ditampilkan di hero)
   initials: "F & U",
   // Tanggal acara (dipakai countdown)

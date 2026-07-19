@@ -39,7 +39,7 @@ export default function Home() {
 
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
       <div
-        className={`h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
+        className={`no-scrollbar h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
       >
         <HeroSection />
         <CoupleSection />
@@ -49,16 +49,16 @@ export default function Home() {
         <OutroSection />
       </div>
 
-      {/* Layar onboarding */}
+      {/* Layar onboarding — terangkat ke atas saat dibuka (bukan fade), seperti membuka amplop */}
       <div
-        className={`absolute inset-0 z-50 transition-opacity duration-700 ${
-          opened ? "pointer-events-none opacity-0" : "opacity-100"
+        className={`absolute inset-0 z-50 transition-transform duration-[850ms] ease-[cubic-bezier(0.65,0,0.35,1)] ${
+          opened ? "pointer-events-none -translate-y-full" : "translate-y-0"
         }`}
       >
         {/* Background foto — zoom perlahan (Ken Burns) */}
         <div className="anim-ken-burns absolute inset-0">
           <Image
-            src="/images/bg-onboard.png"
+            src="/images/bg-onboard-2.png"
             alt="Foto pasangan"
             fill
             priority
@@ -113,12 +113,12 @@ export default function Home() {
           </p>
 
           <div
-            className="anim-fade-up mt-6 w-full"
+            className="anim-fade-up mt-6"
             style={{ animationDelay: "1.6s" }}
           >
             <button
               onClick={open}
-              className="anim-glow w-full rounded-md bg-primary py-3 font-sans text-[13px] font-medium uppercase tracking-[0.15em] text-secondary-dark shadow-lg transition hover:bg-primary-dark"
+              className="anim-glow anim-shine cursor-pointer rounded-lg border border-primary/70 bg-secondary-dark/50 px-10 py-2.5 font-sans text-[13px] font-medium uppercase tracking-[0.15em] text-primary shadow-lg backdrop-blur-sm transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.97]"
             >
               Buka Undangan
             </button>

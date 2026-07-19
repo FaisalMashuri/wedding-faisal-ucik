@@ -12,7 +12,7 @@ export function OutroSection() {
   const { couple, message } = wedding.outro;
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#414341]">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#414341]">
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-outro.png"

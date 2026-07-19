@@ -9,7 +9,7 @@ import { wedding } from "@/config/wedding";
  */
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
       {/* Kotak dikunci rasio 9:16 = rasio asli gambar (diukur dari lebar),
           jadi gambar tampil utuh & teks bisa diposisikan akurat relatif
           terhadap area putih di desain. */}

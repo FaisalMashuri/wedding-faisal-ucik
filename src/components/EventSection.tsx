@@ -7,16 +7,16 @@ type Schedule = { title: string; time: string; location: string };
 /** Isi satu kartu acara — kartu putih berdiri sendiri (bukan lagi kotak di background). */
 function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
   return (
-    <div className="flex w-full flex-col items-center rounded-[28px] border-2 border-primary bg-white px-6 py-7 text-secondary">
+    <div className="flex w-full flex-col items-center rounded-[28px] border-2 border-primary bg-white px-6 py-5 text-secondary">
       <h3 className="text-center font-script text-[26px] leading-none underline decoration-secondary/50 decoration-1 underline-offset-[6px]">
         {e.title}
       </h3>
 
-      <p className="mt-4 text-center font-sans text-[12px] font-bold">
+      <p className="mt-3 text-center font-sans text-[12px] font-bold">
         At: {e.time}
       </p>
 
-      <p className="mt-4 font-sans text-[12px] font-bold text-primary-dark">
+      <p className="mt-3 font-sans text-[12px] font-bold text-primary-dark">
         Location:
       </p>
       <p className="text-center font-sans text-[12px] leading-relaxed">
@@ -74,16 +74,16 @@ export function EventSection() {
         <div className="absolute inset-x-0 top-[24%] flex flex-col items-center px-8">
           <Countdown />
 
-          <p className="mt-6 w-full text-center font-sans text-[14px] leading-relaxed text-white/90 font-bold">
+          <p className="mt-4 w-full text-center font-sans text-[14px] leading-relaxed text-white/90 font-bold">
             By the grace of God, we request the honour of your presence at
             the marriage of our children :
           </p>
 
-          <div className="mt-7 w-full">
+          <div className="mt-5 w-full">
             <EventCard e={akad} />
           </div>
 
-          <div className="mt-6 w-full">
+          <div className="mt-4 w-full">
             <EventCard e={reception} mapUrl={wedding.mapUrl} />
           </div>
         </div>

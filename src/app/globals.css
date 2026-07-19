@@ -173,6 +173,49 @@ body {
   animation-delay: 1.6s;
 }
 
+/* Kilau tipis menyapu permukaan tombol (bukan teks) */
+@keyframes button-shine {
+  0%,
+  18% {
+    background-position: 160% 0;
+  }
+  55%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+.anim-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.anim-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 60%
+  );
+  background-size: 250% 100%;
+  animation: button-shine 3.6s ease-in-out infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+}
+
+/* Sembunyikan scrollbar tapi tetap bisa discroll (semua browser) */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Edge lama */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge baru */
+}
+
 /* Hormati preferensi kurangi-gerak */
 @media (prefers-reduced-motion: reduce) {
   .anim-fade-up,
@@ -192,5 +235,10 @@ body {
     animation: none;
     color: var(--color-primary);
     -webkit-text-fill-color: var(--color-primary);
+  }
+
+  .anim-shine::after {
+    animation: none;
+    opacity: 0;
   }
 }

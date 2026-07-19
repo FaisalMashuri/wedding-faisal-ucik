@@ -57,7 +57,7 @@ export function CoupleSection() {
   const d = wedding.saveTheDate;
 
   return (
-    <section className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-[#30535d]">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-couple.png"
@@ -69,25 +69,25 @@ export function CoupleSection() {
         />
 
         {/* Konten di dalam kotak putih */}
-        <div className="absolute inset-0 flex flex-col items-center justify-start pt-24 px-16 text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-start pt-14 px-16 text-center">
           <p className="font-sans text-[16px] font-bold leading-snug text-primary-dark">
             You are Invited to
             <br />
             The Wedding of:
           </p>
 
-          <div className="mt-20">
+          <div className="mt-9">
             <Person p={bride} />
           </div>
 
-          <p className="my-5 font-script text-[34px] leading-none text-secondary">
+          <p className="my-3 font-script text-[34px] leading-none text-secondary">
             &amp;
           </p>
 
           <Person p={groom} />
 
           {/* Save the date */}
-          <p className="mt-20 font-serif text-[26px] leading-none text-secondary">
+          <p className="mt-9 font-serif text-[26px] leading-none text-secondary">
             Save the date
           </p>
 
