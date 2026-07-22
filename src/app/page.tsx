@@ -58,7 +58,7 @@ export default function Home() {
         {/* Background foto — zoom perlahan (Ken Burns) */}
         <div className="anim-ken-burns absolute inset-0">
           <Image
-            src="/images/Opening_2.png"
+            src="/images/Opening_2.webp"
             alt="Foto pasangan"
             fill
             priority

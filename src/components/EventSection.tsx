@@ -90,7 +90,7 @@ export function EventSection() {
     <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[1080/2515]">
         <Image
-          src="/images/bg-save-the-date.png"
+          src="/images/bg-save-the-date.webp"
           alt=""
           fill
           unoptimized

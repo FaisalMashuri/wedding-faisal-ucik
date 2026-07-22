@@ -105,7 +105,7 @@ export function RsvpSection() {
     <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
       <div className="relative w-full aspect-[9/16]">
         <Image
-          src="/images/bg-rsvp.png"
+          src="/images/bg-rsvp.webp"
           alt=""
           fill
           unoptimized

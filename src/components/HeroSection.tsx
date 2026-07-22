@@ -15,7 +15,7 @@ export function HeroSection() {
           terhadap area putih di desain. */}
       <div className="relative w-full aspect-[9/16]">
         <Image
-          src="/images/bg-hero.png"
+          src="/images/bg-hero.webp"
           alt="Foto pasangan"
           fill
           priority

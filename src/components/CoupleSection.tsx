@@ -79,7 +79,7 @@ export function CoupleSection() {
     <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[9/16]">
         <Image
-          src="/images/bg-couple.png"
+          src="/images/bg-couple.webp"
           alt=""
           fill
           unoptimized

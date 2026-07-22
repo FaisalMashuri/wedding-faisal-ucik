@@ -59,7 +59,7 @@ export const wedding = {
       place: "kampus merdeka by Kemendikbudristek",
       top: 28,
       photoSide: "left",
-      photos: ["/images/bg-onboard.png", "/images/bg-onboard.png"],
+      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
     {
       // Engagement: teks tercetak di gambar, hanya foto yang dioverlay
@@ -67,14 +67,14 @@ export const wedding = {
       place: null,
       top: 55,
       photoSide: "right",
-      photos: ["/images/bg-onboard.png", "/images/bg-onboard.png"],
+      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
     {
       title: "Wedding : 05 Sept 2026",
       place: "Balai Desa Tamanrejo, Limbangan, Kendal",
       top: 80,
       photoSide: "left",
-      photos: ["/images/bg-onboard.png", "/images/bg-onboard.png"],
+      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
   ],
 
