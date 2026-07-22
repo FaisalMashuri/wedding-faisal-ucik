@@ -48,7 +48,7 @@ function Polaroids({
 
 /**
  * Timeline section — "The Path We Walked Together".
- * Background: /images/bg-timeline.png (garis tengah x=50%, ornamen,
+ * Background: /images/bg-timeline.webp (garis tengah x=50%, ornamen,
  * + node "Engagement" tercetak di gambar di ~55%).
  *
  * KNOB edit sendiri: src/config/wedding.ts (`timelineTitle`, `timeline`).

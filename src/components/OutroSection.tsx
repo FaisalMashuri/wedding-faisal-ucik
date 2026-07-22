@@ -3,7 +3,7 @@ import { wedding } from "@/config/wedding";
 
 /**
  * Outro section — penutup, full satu layar.
- * Background: /images/bg-outro.png (kolase foto + disclaimer amplop tercetak
+ * Background: /images/bg-outro.webp (kolase foto + disclaimer amplop tercetak
  * di bagian bawah gambar).
  *
  * KNOB edit sendiri: src/config/wedding.ts (`outro`).

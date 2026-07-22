@@ -49,7 +49,7 @@ export const wedding = {
   mapUrl:
     "https://www.google.com/maps/search/?api=1&query=Balai+Desa+Tamanrejo+Limbangan+Kendal",
 
-  // Timeline (node "Engagement" sudah tercetak di bg-timeline.png).
+  // Timeline (node "Engagement" sudah tercetak di bg-timeline.webp).
   timelineTitle: "The Path\nWe Walked Together",
   // top = posisi vertikal (%), photoSide = sisi foto (teks di sisi berlawanan).
   // Ganti path foto di `photos` (2 foto per milestone) dengan foto asli.
@@ -78,7 +78,7 @@ export const wedding = {
     },
   ],
 
-  // Penutup (Outro section) — disclaimer amplop tercetak di bg-outro.png.
+  // Penutup (Outro section) — disclaimer amplop tercetak di bg-outro.webp.
   outro: {
     couple: "Ucik & Faisal",
     message:

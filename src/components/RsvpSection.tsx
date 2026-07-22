@@ -48,7 +48,7 @@ const SAMPLE: Wish[] = [
 
 /**
  * RSVP & Wishes — form konfirmasi + daftar ucapan (guestbook).
- * Background: /images/bg-rsvp.png (kanvas cream, ornamen daun).
+ * Background: /images/bg-rsvp.webp (kanvas cream, ornamen daun).
  * Submit & baca -> tabel `rsvp` di Supabase (lihat supabase/rsvp.sql).
  */
 export function RsvpSection() {

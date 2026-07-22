@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { wedding } from "@/config/wedding";
+import { fluid } from "@/lib/fluid";
 
 function calc(target: number) {
   const diff = Math.max(0, target - Date.now());
@@ -16,11 +17,17 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 function Unit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="flex w-9 flex-col items-center">
-      <div className="flex h-6 items-center font-[family-name:var(--font-counter)] text-[21px] leading-none text-secondary">
+    <div className="flex flex-col items-center" style={{ width: fluid(36) }}>
+      <div
+        className="flex items-center font-[family-name:var(--font-counter)] leading-none text-secondary"
+        style={{ height: fluid(24), fontSize: fluid(21) }}
+      >
         {pad(value)}
       </div>
-      <span className="mt-1 font-sans text-[8px] text-primary">
+      <span
+        className="font-sans text-primary"
+        style={{ marginTop: fluid(4), fontSize: fluid(8) }}
+      >
         {label}
       </span>
     </div>
@@ -30,7 +37,10 @@ function Unit({ value, label }: { value: number; label: string }) {
 /** Pemisah ":" sejajar tengah angka. */
 function Sep() {
   return (
-    <div className="flex h-6 items-center font-[family-name:var(--font-counter)] text-[15px] text-primary">
+    <div
+      className="flex items-center font-[family-name:var(--font-counter)] text-primary"
+      style={{ height: fluid(24), fontSize: fluid(15) }}
+    >
       :
     </div>
   );
@@ -50,13 +60,26 @@ export function Countdown() {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="font-[family-name:var(--font-counter)] text-[17px] text-white">
+      <p
+        className="font-[family-name:var(--font-counter)] text-white"
+        style={{ fontSize: fluid(17) }}
+      >
         Counting The Days
       </p>
-      <div className=" flex w-auto items-start justify-center gap-2 rounded-2xl bg-white/95 px-5 py-3 shadow-sm">
+      <div
+        className="flex w-auto items-start justify-center rounded-2xl bg-white/95 shadow-sm"
+        style={{
+          marginTop: fluid(10),
+          gap: fluid(8),
+          paddingLeft: fluid(20),
+          paddingRight: fluid(20),
+          paddingTop: fluid(12),
+          paddingBottom: fluid(12),
+        }}
+      >
         <Unit value={t.d} label="Days" />
         <Sep />
-        <Unit value={t.h} label="Hours" /> 
+        <Unit value={t.h} label="Hours" />
         <Sep />
         <Unit value={t.m} label="Minutes" />
       </div>

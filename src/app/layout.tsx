@@ -50,6 +50,11 @@ const alikeAngular = Alike_Angular({
 export const metadata: Metadata = {
   title: "The Wedding Of",
   description: "Undangan pernikahan",
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
+  },
 };
 
 // Kunci rendering ke ukuran perangkat mobile

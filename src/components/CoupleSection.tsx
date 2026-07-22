@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
+import { fluid } from "@/lib/fluid";
 
 /** Badge Instagram (pill emas) — jadi link kalau ada handle-nya. */
 function IgBadge({ handle }: { handle: string }) {
   const content = (
     <>
       <svg
-        className="h-6 w-6"
+        className="h-6 w-6 shrink-0"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -21,9 +22,22 @@ function IgBadge({ handle }: { handle: string }) {
     </>
   );
 
+  const style = {
+    marginTop: fluid(8),
+    gap: fluid(6),
+    paddingLeft: fluid(8),
+    paddingRight: fluid(16),
+    paddingTop: fluid(3),
+    paddingBottom: fluid(3),
+    fontSize: fluid(12),
+  };
+
   if (handle === "-") {
     return (
-      <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary pl-2 pr-4 py-[0.8] text-[12px] text-white">
+      <span
+        className="inline-flex items-center rounded-full bg-primary text-white"
+        style={style}
+      >
         {content}
       </span>
     );
@@ -34,7 +48,8 @@ function IgBadge({ handle }: { handle: string }) {
       href={`https://www.instagram.com/${handle}/`}
       target="_blank"
       rel="noopener noreferrer"
-      className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary pl-2 pr-4 py-[0.8] text-[12px] text-white"
+      className="inline-flex items-center rounded-full bg-primary text-white outline-none"
+      style={{ ...style, WebkitTapHighlightColor: "transparent" }}
     >
       {content}
     </a>
@@ -49,13 +64,22 @@ function Person({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <p className="font-script text-[44px] leading-none text-secondary">
+      <p
+        className="font-script leading-none text-secondary"
+        style={{ fontSize: fluid(44) }}
+      >
         {p.name}
       </p>
-      <p className="mt-2 font-sans text-[12px] text-secondary/80">
+      <p
+        className="font-sans text-secondary/80"
+        style={{ marginTop: fluid(8), fontSize: fluid(12) }}
+      >
         {p.relation}
       </p>
-      <p className="max-w-[240px] font-sans text-[12px] text-secondary">
+      <p
+        className="font-sans text-secondary"
+        style={{ maxWidth: fluid(240), fontSize: fluid(12) }}
+      >
         {p.parents}
       </p>
       <IgBadge handle={p.ig} />
@@ -65,11 +89,11 @@ function Person({
 
 /**
  * Couple section — perkenalan mempelai + save the date, full satu layar.
- * Background: /images/bg-event.png (frame 9:16, kotak putih ~10%–90%).
+ * Background: /images/bg-couple.webp (frame 9:16, kotak putih ~10%–90%).
  *
  * KNOB edit sendiri:
  *  • Nama/orang tua/IG/tanggal -> src/config/wedding.ts (`couple`, `saveTheDate`)
- *  • Ukuran nama mempelai      -> text-[40px] pada <p> di komponen Person
+ *  • Ukuran nama mempelai      -> lewat fluid() di komponen Person
  */
 export function CoupleSection() {
   const { bride, groom } = wedding.couple;
@@ -88,41 +112,68 @@ export function CoupleSection() {
         />
 
         {/* Konten di dalam kotak putih */}
-        <div className="absolute inset-0 flex flex-col items-center justify-start pt-14 px-16 text-center mt-20 mb-100">
-          <p className="font-sans text-[25px] font-bold leading-snug text-primary-dark">
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-start text-center"
+          style={{ paddingTop: fluid(132), paddingLeft: fluid(32), paddingRight: fluid(32) }}
+        >
+          <p
+            className="font-sans font-bold leading-snug text-primary-dark"
+            style={{ fontSize: fluid(21) }}
+          >
             You are Invited to
             <br />
             The Wedding of:
           </p>
 
-          <div className="mt-15">
+          <div style={{ marginTop: fluid(40) }}>
             <Person p={bride} />
           </div>
 
-          <p className="my-3 font-script text-[34px] leading-none text-secondary">
+          <p
+            className="font-script leading-none text-secondary"
+            style={{ fontSize: fluid(34), marginTop: fluid(12), marginBottom: fluid(12) }}
+          >
             &amp;
           </p>
 
-          <div className="mb-10">
+          <div style={{ marginBottom: fluid(40) }}>
             <Person p={groom} />
           </div>
 
           {/* Save the date */}
-          <p className="mt-4 font-serif text-[20px] leading-none text-secondary">
+          <p
+            className="font-serif leading-none text-secondary"
+            style={{ fontSize: fluid(20), marginTop: fluid(16) }}
+          >
             Save the date
           </p>
 
-          <div className="mt-2 flex items-center gap-3 text-secondary">
-            <span className="font-sans text-[24px]">{d.day}</span>
-            <span className="h-8 w-px bg-secondary/40" />
-            <span className="font-sans text-[24px] font-bold leading-none">
+          <div
+            className="flex items-center text-secondary"
+            style={{ marginTop: fluid(8), gap: fluid(8) }}
+          >
+            <span style={{ fontSize: fluid(22) }}>{d.day}</span>
+            <span
+              className="bg-secondary/40"
+              style={{ width: 1, height: fluid(32) }}
+            />
+            <span
+              className="font-bold leading-none"
+              style={{ fontSize: fluid(22) }}
+            >
               {d.date}
             </span>
-            <span className="h-8 w-px bg-secondary/40" />
-            <span className="font-sans text-[24px]">{d.month}</span>
+            <span
+              className="bg-secondary/40"
+              style={{ width: 1, height: fluid(32) }}
+            />
+            <span style={{ fontSize: fluid(22) }}>{d.month}</span>
           </div>
 
-          <p className="mt-1.5 font-sans text-[14px] font-bold text-secondary">
+          <p
+            className="font-sans font-bold text-secondary"
+            style={{ fontSize: fluid(13), marginTop: fluid(6) }}
+          >
             {d.year} at 09.30 a.m
           </p>
         </div>

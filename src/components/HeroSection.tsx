@@ -3,7 +3,7 @@ import { wedding } from "@/config/wedding";
 
 /**
  * Hero section — layar pembuka undangan, full satu layar (h-dvh).
- * Background: /images/bg-hero.png (frame 9:16 dengan foto + ornamen).
+ * Background: /images/bg-hero.webp (frame 9:16 dengan foto + ornamen).
  * Gambar ditampilkan utuh (tidak di-crop/zoom); area kosong section
  * memakai warna tepi gambar (#E8E8E0) agar menyatu.
  */
