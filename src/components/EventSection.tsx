@@ -4,22 +4,50 @@ import { Countdown } from "./Countdown";
 
 type Schedule = { title: string; time: string; location: string };
 
+/** Jarak antar elemen kartu (px CSS, sudah dikonversi dari skala Figma 1080 -> layar 480). */
+type CardSpacing = {
+  topPad: number; // garis atas kotak -> judul
+  titleGap: number; // judul -> jam
+  timeToLocationGap?: number; // jam -> label "Location:"
+  titleSize: number; // ukuran font judul (px)
+};
+
 /** Isi satu kartu acara — kartu putih berdiri sendiri (bukan lagi kotak di background). */
-function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
+function EventCard({
+  e,
+  mapUrl,
+  spacing,
+}: {
+  e: Schedule;
+  mapUrl?: string;
+  spacing: CardSpacing;
+}) {
   return (
-    <div className="flex w-full flex-col items-center rounded-[28px] border-2 border-primary bg-white px-6 py-5 text-secondary">
-      <h3 className="text-center font-script text-[26px] leading-none underline decoration-secondary/50 decoration-1 underline-offset-[6px]">
+    <div
+      className="mx-auto flex h-[266px] w-[317px] flex-col items-center rounded-[67px] border-4 border-primary bg-white px-8 pb-5 text-secondary"
+      style={{ paddingTop: spacing.topPad }}
+    >
+      <h3
+        className="text-center font-script leading-none underline decoration-secondary/50 decoration-1 underline-offset-[6px]"
+        style={{ fontSize: spacing.titleSize }}
+      >
         {e.title}
       </h3>
 
-      <p className="mt-3 text-center font-sans text-[12px] font-bold">
+      <p
+        className="text-center font-sans text-[14px] font-bold"
+        style={{ marginTop: spacing.titleGap }}
+      >
         At: {e.time}
       </p>
 
-      <p className="mt-3 font-sans text-[12px] font-bold text-primary-dark">
+      <p
+        className="w-full text-left font-sans text-[14px] font-bold text-primary-dark"
+        style={{ marginTop: spacing.timeToLocationGap ?? 12 }}
+      >
         Location:
       </p>
-      <p className="text-center font-sans text-[12px] leading-relaxed">
+      <p className="w-full text-left font-sans text-[14px] leading-relaxed">
         {e.location}
       </p>
 
@@ -31,7 +59,7 @@ function EventCard({ e, mapUrl }: { e: Schedule; mapUrl?: string }) {
           className="mt-4 inline-flex items-center gap-1.5 self-center rounded-full bg-primary px-4 py-1.5 text-[12px] font-medium text-secondary-dark"
         >
           <svg
-            className="h-3.5 w-3.5"
+            className="h-3.5 w-3.5 text-white"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -71,20 +99,32 @@ export function EventSection() {
         />
 
         {/* Konten — mengalir di bawah ilustrasi pasangan */}
-        <div className="absolute inset-x-0 top-[24%] flex flex-col items-center px-8">
+        <div className="absolute inset-x-0 top-[24%] flex flex-col items-center px-16">
           <Countdown />
 
-          <p className="mt-4 w-full text-center font-sans text-[14px] leading-relaxed text-white/90 font-bold">
+          <p className="mt-4 w-full text-center font-sans text-[12px] leading-relaxed text-white/90">
             By the grace of God, we request the honour of your presence at
             the marriage of our children :
           </p>
 
           <div className="mt-5 w-full">
-            <EventCard e={akad} />
+            <EventCard
+              e={akad}
+              spacing={{ topPad: 28, titleGap: 29, titleSize: 32 }}
+            />
           </div>
 
-          <div className="mt-4 w-full">
-            <EventCard e={reception} mapUrl={wedding.mapUrl} />
+          <div className="mt-[43px] w-full">
+            <EventCard
+              e={reception}
+              mapUrl={wedding.mapUrl}
+              spacing={{
+                topPad: 31,
+                titleGap: 8,
+                timeToLocationGap: 29,
+                titleSize: 28,
+              }}
+            />
           </div>
         </div>
       </div>

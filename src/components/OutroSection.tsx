@@ -23,9 +23,6 @@ export function OutroSection() {
           className="object-cover"
         />
 
-        {/* Overlay agar teks terbaca */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/55 to-black/35" />
-
         {/* Konten — di tengah container */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-12 text-center text-white">
           <h2 className="font-serif text-[30px] leading-none drop-shadow">

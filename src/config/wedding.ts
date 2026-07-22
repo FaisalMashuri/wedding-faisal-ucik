@@ -17,13 +17,13 @@ export const wedding = {
   couple: {
     bride: {
       name: "Ucik Faruqo Heni",
-      relation: "The Daughter of",
+      relation: "The daughter of",
       parents: "Bp. Muh Romin and Ibu Siti Rodhiyah",
       ig: "ufh_22",
     },
     groom: {
       name: "Faisal Mashuri",
-      relation: "The son Of",
+      relation: "The son of",
       parents: "Bp. Abdul Syukur and Ibu Untung Rahayu S. (Almh)",
       ig: "-",
     },

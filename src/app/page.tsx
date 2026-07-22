@@ -58,7 +58,7 @@ export default function Home() {
         {/* Background foto — zoom perlahan (Ken Burns) */}
         <div className="anim-ken-burns absolute inset-0">
           <Image
-            src="/images/bg-onboard-2.png"
+            src="/images/Opening_2.png"
             alt="Foto pasangan"
             fill
             priority
@@ -67,9 +67,6 @@ export default function Home() {
             className="object-cover"
           />
         </div>
-
-        {/* Overlay gradient: foto di atas, membaur ke teal di bawah */}
-        <div className="anim-overlay absolute inset-0 bg-gradient-to-b from-black/25 via-secondary/40 to-secondary" />
 
         {/* Konten onboarding */}
         <div className="relative flex h-full flex-col items-center justify-end px-8 pb-10 text-center text-white">
@@ -81,7 +78,7 @@ export default function Home() {
           </p>
 
           <h1
-            className="anim-fade-up mt-2 font-serif text-[46px] font-normal leading-[1.1] text-primary drop-shadow-sm"
+            className="anim-fade-up mt-7 font-serif text-[30px] font-normal leading-[1.1] text-primary drop-shadow-sm"
             style={{ animationDelay: "0.75s" }}
           >
             {wedding.coupleShort}
@@ -89,24 +86,24 @@ export default function Home() {
 
           {/* Blok tamu — lebar divider mengikuti teks "Kepada Yth." */}
           <div
-            className="anim-fade-up mt-7 flex w-fit flex-col items-center"
+            className="anim-fade-up flex w-fit flex-col items-center"
             style={{ animationDelay: "1.15s" }}
           >
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-primary mt-10">
               Kepada Yth. Bapak/Ibu/Saudara/i
             </p>
 
-            <span className="my-3.5 h-px self-stretch bg-white" />
+            <span className="mb-8 h-px self-stretch bg-white" />
 
-            <p className="font-sans text-[18px] font-bold tracking-wide text-primary">
+            <p className="font-sans text-[14px] font-bold tracking-wide text-primary">
               {guestName ?? "Bp. Abc Def"}
             </p>
 
-            <span className="my-3.5 h-px self-stretch bg-white" />
+            <span className="mt-8 h-px self-stretch bg-white" />
           </div>
 
           <p
-            className="anim-fade-up mt-1.5 font-sans text-[10px] italic text-primary/80"
+            className="anim-fade-up font-sans text-[9px] italic text-primary/80"
             style={{ animationDelay: "1.4s" }}
           >
             &bull; Mohon maaf bila ada kesalahan penulisan nama/gelar
@@ -118,7 +115,7 @@ export default function Home() {
           >
             <button
               onClick={open}
-              className="anim-glow anim-shine cursor-pointer rounded-lg border border-primary/70 bg-secondary-dark/50 px-10 py-2.5 font-sans text-[13px] font-medium uppercase tracking-[0.15em] text-primary shadow-lg backdrop-blur-sm transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.97]"
+              className="anim-glow anim-shine cursor-pointer rounded-lg border border-primary-dark/40 bg-primary px-10 py-2 font-sans text-[10px] font-medium uppercase tracking-[0.15em] text-secondary shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.97]"
             >
               Buka Undangan
             </button>

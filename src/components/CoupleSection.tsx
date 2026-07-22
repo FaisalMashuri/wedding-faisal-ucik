@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 
-/** Badge Instagram (pill emas). */
+/** Badge Instagram (pill emas) — jadi link kalau ada handle-nya. */
 function IgBadge({ handle }: { handle: string }) {
-  return (
-    <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-[10px] font-semibold text-secondary-dark">
+  const content = (
+    <>
       <svg
-        className="h-3 w-3"
+        className="h-6 w-6"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -18,7 +18,26 @@ function IgBadge({ handle }: { handle: string }) {
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
       </svg>
       {handle}
-    </span>
+    </>
+  );
+
+  if (handle === "-") {
+    return (
+      <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary pl-2 pr-4 py-[0.8] text-[12px] text-white">
+        {content}
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={`https://www.instagram.com/${handle}/`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary pl-2 pr-4 py-[0.8] text-[12px] text-white"
+    >
+      {content}
+    </a>
   );
 }
 
@@ -30,13 +49,13 @@ function Person({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <p className="font-script text-[40px] leading-none text-secondary">
+      <p className="font-script text-[44px] leading-none text-secondary">
         {p.name}
       </p>
-      <p className="mt-2 font-sans text-[11px] text-secondary/80">
+      <p className="mt-2 font-sans text-[12px] text-secondary/80">
         {p.relation}
       </p>
-      <p className="max-w-[240px] font-sans text-[12px] font-medium text-secondary">
+      <p className="max-w-[240px] font-sans text-[12px] text-secondary">
         {p.parents}
       </p>
       <IgBadge handle={p.ig} />
@@ -69,14 +88,14 @@ export function CoupleSection() {
         />
 
         {/* Konten di dalam kotak putih */}
-        <div className="absolute inset-0 flex flex-col items-center justify-start pt-14 px-16 text-center">
-          <p className="font-sans text-[16px] font-bold leading-snug text-primary-dark">
+        <div className="absolute inset-0 flex flex-col items-center justify-start pt-14 px-16 text-center mt-20 mb-100">
+          <p className="font-sans text-[25px] font-bold leading-snug text-primary-dark">
             You are Invited to
             <br />
             The Wedding of:
           </p>
 
-          <div className="mt-9">
+          <div className="mt-15">
             <Person p={bride} />
           </div>
 
@@ -84,21 +103,23 @@ export function CoupleSection() {
             &amp;
           </p>
 
-          <Person p={groom} />
+          <div className="mb-10">
+            <Person p={groom} />
+          </div>
 
           {/* Save the date */}
-          <p className="mt-9 font-serif text-[26px] leading-none text-secondary">
+          <p className="mt-4 font-serif text-[20px] leading-none text-secondary">
             Save the date
           </p>
 
           <div className="mt-2 flex items-center gap-3 text-secondary">
-            <span className="font-sans text-[30px]">{d.day}</span>
+            <span className="font-sans text-[24px]">{d.day}</span>
             <span className="h-8 w-px bg-secondary/40" />
-            <span className="font-sans text-[30px] font-bold leading-none">
+            <span className="font-sans text-[24px] font-bold leading-none">
               {d.date}
             </span>
             <span className="h-8 w-px bg-secondary/40" />
-            <span className="font-sans text-[30px]">{d.month}</span>
+            <span className="font-sans text-[24px]">{d.month}</span>
           </div>
 
           <p className="mt-1.5 font-sans text-[14px] font-bold text-secondary">

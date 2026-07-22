@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
+import { useOnboardingStore } from "@/store/onboarding";
 
 type Wish = { name: string; message: string };
 
@@ -51,13 +52,19 @@ const SAMPLE: Wish[] = [
  * Submit & baca -> tabel `rsvp` di Supabase (lihat supabase/rsvp.sql).
  */
 export function RsvpSection() {
-  const [name, setName] = useState("");
+  const guestName = useOnboardingStore((s) => s.guestName);
+  const [name, setName] = useState(guestName ?? "");
   const [attendance, setAttendance] = useState<"hadir" | "tidak_hadir">(
     "hadir"
   );
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [wishes, setWishes] = useState<Wish[]>(SAMPLE);
+
+  // Ikuti nama tamu dari onboarding (?to=) begitu tersedia.
+  useEffect(() => {
+    if (guestName) setName(guestName);
+  }, [guestName]);
 
   // Ambil ucapan yang sudah ada
   useEffect(() => {
@@ -86,7 +93,7 @@ export function RsvpSection() {
     if (!error && row.message) {
       setWishes((w) => [{ name: row.name, message: row.message! }, ...w]);
     }
-    setName("");
+    setName(guestName ?? "");
     setMessage("");
   }
 
@@ -120,10 +127,10 @@ export function RsvpSection() {
             <div className="flex flex-col gap-1">
               <span className={label}>Name</span>
               <input
-                className={field}
+                className={`${field} disabled:cursor-not-allowed disabled:opacity-100`}
                 placeholder="Nama Undangan"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                disabled
                 required
               />
             </div>

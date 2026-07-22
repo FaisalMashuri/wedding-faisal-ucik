@@ -26,7 +26,7 @@ export function SplashScreen() {
 
   useEffect(() => {
     // Pre-warm gambar onboarding selama splash agar transisi mulus (non-blocking).
-    new window.Image().src = "/images/bg-onboard-2.png";
+    new window.Image().src = "/images/Opening_2.png";
 
     // Mulai fade-out setelah animasi masuk selesai, lalu unmount.
     const fadeTimer = setTimeout(() => setLeaving(true), 2600);
