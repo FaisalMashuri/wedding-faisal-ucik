@@ -56,7 +56,7 @@ export function Countdown() {
       <div className=" flex w-auto items-start justify-center gap-2 rounded-2xl bg-white/95 px-5 py-3 shadow-sm">
         <Unit value={t.d} label="Days" />
         <Sep />
-        <Unit value={t.h} label="Hours" />
+        <Unit value={t.h} label="Hours" /> 
         <Sep />
         <Unit value={t.m} label="Minutes" />
       </div>
