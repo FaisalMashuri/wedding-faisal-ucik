@@ -1,5 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Alice, Montserrat, Beau_Rivage, Alike_Angular } from "next/font/google";
+import {
+  Alice,
+  Montserrat,
+  Beau_Rivage,
+  Alike_Angular,
+  Courier_Prime,
+  Cormorant_Garamond,
+} from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -47,6 +54,20 @@ const alikeAngular = Alike_Angular({
   weight: "400",
 });
 
+// Mono typewriter — untuk loader amplop (gaya pos udara vintage)
+const courierPrime = Courier_Prime({
+  variable: "--font-courier",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+// Display serif — untuk nama di loader amplop
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+});
+
 export const metadata: Metadata = {
   title: "The Wedding Of",
   description: "Undangan pernikahan",
@@ -71,7 +92,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${alice.variable} ${montserrat.variable} ${beauRivage.variable} ${montserratSubrayada.variable} ${alikeAngular.variable} h-full antialiased`}
+      className={`${alice.variable} ${montserrat.variable} ${beauRivage.variable} ${montserratSubrayada.variable} ${alikeAngular.variable} ${courierPrime.variable} ${cormorantGaramond.variable} h-full antialiased`}
     >
       <body
         className="min-h-full flex justify-center"

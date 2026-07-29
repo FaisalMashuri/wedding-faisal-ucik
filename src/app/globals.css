@@ -207,6 +207,49 @@ body {
   pointer-events: none;
 }
 
+/* =====================================================================
+   ENVELOPE LOADER — gaya pos udara vintage (mengikuti referensi)
+   ===================================================================== */
+
+.env-flap-clip {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.16));
+}
+
+.env-front-clip {
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: inset 0 8px 14px -10px rgba(0, 0, 0, 0.45);
+}
+
+/* Garis diagonal merah-biru khas amplop pos udara */
+.env-airmail-stripe {
+  background: repeating-linear-gradient(
+    115deg,
+    #b23a2e 0 11px,
+    transparent 11px 22px,
+    #2a4a7b 22px 33px,
+    transparent 33px 44px
+  );
+}
+
+/* Bayangan lembut di bawah amplop */
+.env-under-shadow {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(0, 0, 0, 0.62),
+    transparent 72%
+  );
+}
+
+/* Jeda semua animasi CSS di dalam subtree — dipakai overlay onboarding
+   selama loader amplop tampil, agar tidak berebut main thread. */
+.anims-paused,
+.anims-paused *,
+.anims-paused *::before,
+.anims-paused *::after {
+  animation-play-state: paused !important;
+}
+
 /* Sembunyikan scrollbar tapi tetap bisa discroll (semua browser) */
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */

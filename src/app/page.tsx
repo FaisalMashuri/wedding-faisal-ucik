@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
-import { SplashScreen } from "@/components/SplashScreen";
+import { EnvelopeLoader } from "@/components/EnvelopeLoader";
 import { HeroSection } from "@/components/HeroSection";
 import { CoupleSection } from "@/components/CoupleSection";
 import { EventSection } from "@/components/EventSection";
@@ -22,6 +22,7 @@ import { wedding } from "@/config/wedding";
 
 export default function Home() {
   const opened = useOnboardingStore((s) => s.opened);
+  const loaderDone = useOnboardingStore((s) => s.loaderDone);
   const open = useOnboardingStore((s) => s.open);
   const guestName = useOnboardingStore((s) => s.guestName);
   const setGuestName = useOnboardingStore((s) => s.setGuestName);
@@ -32,28 +33,50 @@ export default function Home() {
     if (to) setGuestName(to);
   }, [setGuestName]);
 
+  // Section undangan berat (banyak gambar besar) baru di-mount SETELAH loader
+  // amplop selesai — supaya hydration + decode gambarnya tidak berebut main
+  // thread dengan animasi amplop. Dipasang saat browser senggang agar tidak
+  // menghantam frame animasi dissolve.
+  const [sectionsReady, setSectionsReady] = useState(false);
+  useEffect(() => {
+    if (!loaderDone || sectionsReady) return;
+    const mount = () => setSectionsReady(true);
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(mount, { timeout: 2000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = setTimeout(mount, 1200); // fallback Safari lama
+    return () => clearTimeout(t);
+  }, [loaderDone, sectionsReady]);
+
   return (
     <main className="relative h-full">
-      {/* Loading screen — tampil dulu, lalu fade-out ke onboarding */}
-      <SplashScreen />
+      {/* Amplop loading — terbuka lalu menghilang, mengungkap onboarding di baliknya */}
+      <EnvelopeLoader />
 
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
       <div
         className={`no-scrollbar h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
       >
-        <HeroSection />
-        <CoupleSection />
-        <EventSection />
-        <TimelineSection />
-        <RsvpSection />
-        <OutroSection />
+        {sectionsReady && (
+          <>
+            <HeroSection />
+            <CoupleSection />
+            <EventSection />
+            <TimelineSection />
+            <RsvpSection />
+            <OutroSection />
+          </>
+        )}
       </div>
 
-      {/* Layar onboarding — terangkat ke atas saat dibuka (bukan fade), seperti membuka amplop */}
+      {/* Layar onboarding — terangkat ke atas saat dibuka (bukan fade), seperti membuka amplop.
+          Animasi CSS-nya dijeda selama loader amplop tampil (hemat main thread,
+          dan entrance-nya jadi terlihat saat reveal). */}
       <div
         className={`absolute inset-0 z-50 transition-transform duration-[850ms] ease-[cubic-bezier(0.65,0,0.35,1)] ${
           opened ? "pointer-events-none -translate-y-full" : "translate-y-0"
-        }`}
+        } ${loaderDone ? "" : "anims-paused"}`}
       >
         {/* Background foto — zoom perlahan (Ken Burns) */}
         <div className="anim-ken-burns absolute inset-0">
