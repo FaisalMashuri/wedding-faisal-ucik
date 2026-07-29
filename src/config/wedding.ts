@@ -49,39 +49,38 @@ export const wedding = {
   mapUrl:
     "https://www.google.com/maps/search/?api=1&query=Balai+Desa+Tamanrejo+Limbangan+Kendal",
 
-  // Timeline (node "Engagement" sudah tercetak di bg-timeline.webp).
-  timelineTitle: "The Path\nWe Walked Together",
-  // top = posisi vertikal (%), photoSide = sisi foto (teks di sisi berlawanan).
+  // Timeline — layout mengikuti frame Figma 1080×2921 (bg-timeline-2.webp).
+  // top = posisi vertikal milestone (% tinggi section).
   // Ganti path foto di `photos` (2 foto per milestone) dengan foto asli.
+  timelineTitle: "The Path\nWe Walked Together",
   timeline: [
     {
       title: "Introduction session : 2021",
-      place: "kampus merdeka by Kemendikbudristek",
-      top: 28,
-      photoSide: "left",
+      place: "Kampus merdeka by Kemendikbudristek",
+      top: 13,
       photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
     {
-      // Engagement: teks tercetak di gambar, hanya foto yang dioverlay
-      title: null,
-      place: null,
-      top: 55,
-      photoSide: "right",
+      title: "Engagement : 15 May 2026",
+      place: "Kopi Kebun Jatisari Semarang",
+      top: 41.5,
       photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
     {
       title: "Wedding : 05 Sept 2026",
       place: "Balai Desa Tamanrejo, Limbangan, Kendal",
-      top: 80,
-      photoSide: "left",
+      top: 68.5,
       photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
     },
   ],
 
-  // Penutup (Outro section) — disclaimer amplop tercetak di bg-outro.webp.
+  // Penutup (Outro section). Background bg-outro-fix.webp bersih tanpa teks;
+  // disclaimer dirender sebagai teks HTML (gampang diedit di sini).
   outro: {
     couple: "Ucik & Faisal",
     message:
       "Suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+    disclaimer:
+      "** Tanpa mengurangi rasa hormat, kami menginformasikan bahwa kami tidak menerima amplop ataupun tanda kasih. Doa restu Anda adalah hadiah terindah bagi kami",
   },
 } as const;

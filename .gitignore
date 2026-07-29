@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# gambar mentah full-res (hanya derivatif webp yang di-commit/deploy)
+/public/images/originals/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

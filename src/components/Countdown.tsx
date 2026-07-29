@@ -25,7 +25,7 @@ function Unit({ value, label }: { value: number; label: string }) {
         {pad(value)}
       </div>
       <span
-        className="font-sans text-primary"
+        className="font-sans font-bold text-primary"
         style={{ marginTop: fluid(4), fontSize: fluid(8) }}
       >
         {label}
@@ -60,9 +60,11 @@ export function Countdown() {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Ukuran diset agar lebar teks pas sama lebar kotak putih di bawahnya
+          (Alike 22px ≈ 188px = pad 40 + 3 unit 108 + 4 gap 32 + 2 sep) */}
       <p
         className="font-[family-name:var(--font-counter)] text-white"
-        style={{ fontSize: fluid(17) }}
+        style={{ fontSize: fluid(22) }}
       >
         Counting The Days
       </p>

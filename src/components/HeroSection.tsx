@@ -41,7 +41,7 @@ export function HeroSection() {
 
           {/* Kutipan — Montserrat (max-w mengatur jumlah baris) */}
           <p className="mx-auto mt-3 max-w-[180px] font-sans text-[8.5px] font-bold leading-[1.6]">
-            "{wedding.quote}"
+            &ldquo;{wedding.quote}&rdquo;
           </p>
 
           {/* Sumber kutipan — script */}

@@ -1,6 +1,13 @@
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
-import { fluid } from "@/lib/fluid";
+import { fluid as fluidBase } from "@/lib/fluid";
+
+// Skala murni proporsional (tanpa floor minRatio): konten section ini harus
+// selalu presisi di dalam kotak putih yang tercetak di bg-couple.webp —
+// gambar menyusut linear dengan lebar layar, jadi semua ukuran/jarak konten
+// wajib ikut linear juga agar tata letak identik dengan referensi di semua
+// jenis layar.
+const fluid = (px480: number) => fluidBase(px480, 0);
 
 /** Badge Instagram (pill emas) — jadi link kalau ada handle-nya. */
 function IgBadge({ handle }: { handle: string }) {
@@ -140,7 +147,7 @@ export function CoupleSection() {
             <Person p={groom} />
           </div>
 
-          {/* Save the date */}
+          {/* Save the date — polos, ketebalan regular (sama seperti Sat/Sept) */}
           <p
             className="font-serif leading-none text-secondary"
             style={{ fontSize: fluid(20), marginTop: fluid(16) }}
@@ -148,33 +155,36 @@ export function CoupleSection() {
             Save the date
           </p>
 
+          {/* Baris tanggal ala mock: font besar, pembatas emas tipis tinggi,
+              dan gap dihitung agar bentang total (teks 145.3 + pembatas 2 +
+              4 gap) pas sama bentang nama "Faisal Mashuri" (215.3px) */}
           <div
             className="flex items-center text-secondary"
-            style={{ marginTop: fluid(8), gap: fluid(8) }}
+            style={{ marginTop: fluid(8), gap: fluid(17) }}
           >
-            <span style={{ fontSize: fluid(22) }}>{d.day}</span>
+            <span style={{ fontSize: fluid(28) }}>{d.day}</span>
             <span
-              className="bg-secondary/40"
-              style={{ width: 1, height: fluid(32) }}
+              className="bg-primary"
+              style={{ width: 1, height: fluid(38) }}
             />
             <span
               className="font-bold leading-none"
-              style={{ fontSize: fluid(22) }}
+              style={{ fontSize: fluid(28) }}
             >
               {d.date}
             </span>
             <span
-              className="bg-secondary/40"
-              style={{ width: 1, height: fluid(32) }}
+              className="bg-primary"
+              style={{ width: 1, height: fluid(38) }}
             />
-            <span style={{ fontSize: fluid(22) }}>{d.month}</span>
+            <span style={{ fontSize: fluid(28) }}>{d.month}</span>
           </div>
 
           <p
             className="font-sans font-bold text-secondary"
-            style={{ fontSize: fluid(13), marginTop: fluid(6) }}
+            style={{ fontSize: fluid(15), marginTop: fluid(6) }}
           >
-            {d.year} at 09.30 a.m
+            {d.year} at 09:30 a.m
           </p>
         </div>
       </div>

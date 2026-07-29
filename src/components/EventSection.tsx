@@ -25,9 +25,9 @@ function EventCard({
 }) {
   return (
     <div
-      className="mx-auto flex w-full max-w-[317px] flex-col items-center border-primary bg-white text-secondary"
+      className="mx-auto flex w-full max-w-[300px] flex-col items-center border-primary bg-white text-secondary"
       style={{
-        minHeight: fluid(266),
+        minHeight: fluid(284),
         borderRadius: fluid(67),
         borderWidth: 4,
         borderStyle: "solid",

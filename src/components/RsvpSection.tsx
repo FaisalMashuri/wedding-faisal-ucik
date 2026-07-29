@@ -53,18 +53,15 @@ const SAMPLE: Wish[] = [
  */
 export function RsvpSection() {
   const guestName = useOnboardingStore((s) => s.guestName);
-  const [name, setName] = useState(guestName ?? "");
+  // Input nama disabled dan selalu mengikuti nama tamu (?to=) — cukup
+  // diturunkan langsung dari store, tidak perlu state + effect sinkronisasi.
+  const name = guestName ?? "";
   const [attendance, setAttendance] = useState<"hadir" | "tidak_hadir">(
     "hadir"
   );
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [wishes, setWishes] = useState<Wish[]>(SAMPLE);
-
-  // Ikuti nama tamu dari onboarding (?to=) begitu tersedia.
-  useEffect(() => {
-    if (guestName) setName(guestName);
-  }, [guestName]);
 
   // Ambil ucapan yang sudah ada
   useEffect(() => {
@@ -93,7 +90,6 @@ export function RsvpSection() {
     if (!error && row.message) {
       setWishes((w) => [{ name: row.name, message: row.message! }, ...w]);
     }
-    setName(guestName ?? "");
     setMessage("");
   }
 

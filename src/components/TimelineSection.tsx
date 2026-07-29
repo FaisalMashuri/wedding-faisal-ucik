@@ -1,45 +1,70 @@
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
+import { fluid as fluidBase } from "@/lib/fluid";
 
-/** Dua foto polaroid bertumpuk & miring. */
-function Polaroids({
-  photos,
-  side,
-  top,
-}: {
-  photos: readonly string[];
-  side: "left" | "right";
-  top: number;
-}) {
+// Skala murni proporsional (tanpa floor): layout harus identik dengan frame
+// Figma (1080×2921) di semua lebar layar — section di-lock aspect-nya, jadi
+// semua ukuran konten wajib menyusut linear bersama lebar.
+const fl = (px480: number) => fluidBase(px480, 0);
+
+// Posisi garis timeline (dari kiri, % lebar section) — mengikuti Figma.
+const LINE_X = "12.9%";
+
+/** Dua foto polaroid berdampingan, sedikit miring & bertumpuk (ala mock). */
+function Polaroids({ photos }: { photos: readonly string[] }) {
   return (
     <div
-      className="absolute -translate-y-1/2"
-      style={{ top: `${top}%`, [side]: "5%" }}
+      className="flex items-start justify-center"
+      style={{ marginTop: fl(14) }}
     >
-      <div className="flex">
-        <div className="rotate-[-7deg] rounded-[2px] bg-white p-1 shadow-md">
-          <div className="relative h-[92px] w-[74px] overflow-hidden">
-            <Image
-              src={photos[0]}
-              alt=""
-              fill
-              unoptimized
-              sizes="80px"
-              className="object-cover"
-            />
-          </div>
+      {/* Sesuai mock: kartu kiri lebih rendah, miring kiri, dan DI ATAS saat
+          bertumpuk; kartu kanan lebih tinggi, miring kanan, terselip di
+          belakang tepi kanan kartu kiri. */}
+      <div
+        className="relative z-10 rotate-[-7deg] bg-white shadow-md"
+        style={{
+          padding: fl(6),
+          paddingBottom: fl(20),
+          borderRadius: fl(2),
+          marginTop: fl(22),
+        }}
+      >
+        <div
+          className="relative overflow-hidden"
+          style={{ width: fl(175), height: fl(180) }}
+        >
+          <Image
+            src={photos[0]}
+            alt=""
+            fill
+            unoptimized
+            sizes="190px"
+            className="object-cover"
+          />
         </div>
-        <div className="-ml-4 mt-3 rotate-[6deg] rounded-[2px] bg-white p-1 shadow-md">
-          <div className="relative h-[92px] w-[74px] overflow-hidden">
-            <Image
-              src={photos[1]}
-              alt=""
-              fill
-              unoptimized
-              sizes="80px"
-              className="object-cover"
-            />
-          </div>
+      </div>
+
+      <div
+        className="rotate-[3deg] bg-white shadow-md"
+        style={{
+          padding: fl(6),
+          paddingBottom: fl(20),
+          borderRadius: fl(2),
+          marginLeft: fl(-38),
+        }}
+      >
+        <div
+          className="relative overflow-hidden"
+          style={{ width: fl(175), height: fl(180) }}
+        >
+          <Image
+            src={photos[1]}
+            alt=""
+            fill
+            unoptimized
+            sizes="190px"
+            className="object-cover"
+          />
         </div>
       </div>
     </div>
@@ -47,9 +72,10 @@ function Polaroids({
 }
 
 /**
- * Timeline section — "The Path We Walked Together".
- * Background: /images/bg-timeline.webp (garis tengah x=50%, ornamen,
- * + node "Engagement" tercetak di gambar di ~55%).
+ * Timeline section — "The Path We Walked Together", layout persis Figma:
+ * garis putus-putus emas di kiri, tiap milestone = titik emas + judul emas
+ * + tempat (putih) + dua polaroid besar di bawahnya.
+ * Background: /images/bg-timeline-2.webp (frame Figma 1080×2921).
  *
  * KNOB edit sendiri: src/config/wedding.ts (`timelineTitle`, `timeline`).
  * Ganti `photos` dengan foto asli tiap milestone.
@@ -57,9 +83,9 @@ function Polaroids({
 export function TimelineSection() {
   return (
     <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
-      <div className="relative w-full aspect-[9/16]">
+      <div className="relative w-full aspect-[1080/2921]">
         <Image
-          src="/images/bg-timeline.webp"
+          src="/images/bg-timeline-2.webp"
           alt=""
           fill
           unoptimized
@@ -68,38 +94,58 @@ export function TimelineSection() {
         />
 
         {/* Judul */}
-        <p className="absolute inset-x-0 top-[4%] whitespace-pre-line px-10 text-center font-serif text-[22px] font-semibold leading-tight text-primary-light">
+        <p
+          className="absolute inset-x-0 whitespace-pre-line text-center font-sans font-bold leading-tight text-primary"
+          style={{ top: "2.8%", fontSize: fl(26) }}
+        >
           {wedding.timelineTitle}
         </p>
 
+        {/* Garis timeline putus-putus */}
+        <span
+          aria-hidden
+          className="absolute -translate-x-1/2"
+          style={{
+            left: LINE_X,
+            top: "12%",
+            bottom: "5.5%",
+            width: fl(2),
+            backgroundImage: `repeating-linear-gradient(to bottom, var(--color-primary) 0 ${fl(10)}, transparent ${fl(10)} ${fl(19)})`,
+          }}
+        />
+
         {wedding.timeline.map((n, i) => (
-          <div key={i}>
-            <Polaroids
-              photos={n.photos}
-              side={n.photoSide as "left" | "right"}
-              top={n.top}
+          <div
+            key={i}
+            className="absolute inset-x-0"
+            style={{ top: `${n.top}%` }}
+          >
+            {/* Titik milestone di garis */}
+            <span
+              className="absolute -translate-x-1/2 rounded-full bg-primary"
+              style={{ left: LINE_X, top: fl(3), width: fl(11), height: fl(11) }}
             />
 
-            {/* Node teks + titik (kalau bukan node bawaan gambar) */}
-            {n.title && (
-              <div className="absolute inset-x-0" style={{ top: `${n.top}%` }}>
-                <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-2 ring-[#30535d]" />
-                <div
-                  className={`absolute top-0 w-[44%] -translate-y-1/2 ${
-                    n.photoSide === "left"
-                      ? "left-[52%] text-left"
-                      : "right-[52%] text-right"
-                  }`}
-                >
-                  <p className="font-sans text-[11px] font-bold leading-tight text-primary">
-                    {n.title}
-                  </p>
-                  <p className="mt-0.5 font-sans text-[9.5px] leading-snug text-primary/75">
-                    {n.place}
-                  </p>
-                </div>
-              </div>
-            )}
+            {/* Judul + tempat, di kanan garis */}
+            <div style={{ marginLeft: "19.3%", marginRight: "6%" }}>
+              <p
+                className="font-sans font-bold leading-tight text-primary"
+                style={{ fontSize: fl(15) }}
+              >
+                {n.title}
+              </p>
+              <p
+                className="font-sans leading-snug text-primary"
+                style={{ fontSize: fl(14), marginTop: fl(3), maxWidth: fl(260) }}
+              >
+                {n.place}
+              </p>
+            </div>
+
+            {/* Foto polaroid — di area kanan garis */}
+            <div style={{ marginLeft: "13%" }}>
+              <Polaroids photos={n.photos} />
+            </div>
           </div>
         ))}
       </div>
