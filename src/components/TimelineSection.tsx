@@ -10,63 +10,88 @@ const fl = (px480: number) => fluidBase(px480, 0);
 // Posisi garis timeline (dari kiri, % lebar section) — mengikuti Figma.
 const LINE_X = "12.9%";
 
-/** Dua foto polaroid berdampingan, sedikit miring & bertumpuk (ala mock). */
-function Polaroids({ photos }: { photos: readonly string[] }) {
+/* ---- Gaya per pasangan polaroid (per milestone, sesuai Figma) ----
+   Tiap kartu: rotate = kelas kemiringan, top = geser turun (px skala 480),
+   onTop = kartu ini yang menutupi saat bertumpuk.
+   overlap = seberapa jauh kartu kanan menindih/menyelip ke kiri (px negatif). */
+type CardStyle = { rotate: string; top?: number; onTop?: boolean };
+type PairStyle = { left: CardStyle; right: CardStyle; overlap: number };
+
+const PAIR_STYLES: readonly PairStyle[] = [
+  // 1 — Introduction: kiri miring kiri, lebih rendah, DI ATAS; kanan miring kanan.
+  {
+    left: { rotate: "rotate-[-7deg]", top: 22, onTop: true },
+    right: { rotate: "rotate-[3deg]" },
+    overlap: -38,
+  },
+  // 2 — Engagement: dua kartu tegak, kiri lebih rendah, kanan DI ATAS,
+  //     overlap tipis.
+  {
+    left: { rotate: "rotate-0", top: 24 },
+    right: { rotate: "rotate-0", onTop: true },
+    overlap: -10,
+  },
+  // 3 — Wedding: sementara memakai gaya pasangan pertama (belum ada mock).
+  {
+    left: { rotate: "rotate-[-7deg]", top: 22, onTop: true },
+    right: { rotate: "rotate-[3deg]" },
+    overlap: -38,
+  },
+];
+
+/** Satu kartu polaroid. */
+function PolaroidCard({
+  src,
+  card,
+  overlap,
+}: {
+  src: string;
+  card: CardStyle;
+  overlap?: number;
+}) {
+  return (
+    <div
+      className={`${card.rotate} ${card.onTop ? "relative z-10" : ""} bg-white shadow-md`}
+      style={{
+        padding: fl(6),
+        paddingBottom: fl(20),
+        borderRadius: fl(2),
+        marginTop: card.top !== undefined ? fl(card.top) : undefined,
+        marginLeft: overlap !== undefined ? fl(overlap) : undefined,
+      }}
+    >
+      <div
+        className="relative overflow-hidden"
+        style={{ width: fl(175), height: fl(180) }}
+      >
+        <Image
+          src={src}
+          alt=""
+          fill
+          unoptimized
+          sizes="190px"
+          className="object-cover"
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Dua foto polaroid berdampingan — komposisinya beda tiap milestone. */
+function Polaroids({
+  photos,
+  pair,
+}: {
+  photos: readonly string[];
+  pair: PairStyle;
+}) {
   return (
     <div
       className="flex items-start justify-center"
       style={{ marginTop: fl(14) }}
     >
-      {/* Sesuai mock: kartu kiri lebih rendah, miring kiri, dan DI ATAS saat
-          bertumpuk; kartu kanan lebih tinggi, miring kanan, terselip di
-          belakang tepi kanan kartu kiri. */}
-      <div
-        className="relative z-10 rotate-[-7deg] bg-white shadow-md"
-        style={{
-          padding: fl(6),
-          paddingBottom: fl(20),
-          borderRadius: fl(2),
-          marginTop: fl(22),
-        }}
-      >
-        <div
-          className="relative overflow-hidden"
-          style={{ width: fl(175), height: fl(180) }}
-        >
-          <Image
-            src={photos[0]}
-            alt=""
-            fill
-            unoptimized
-            sizes="190px"
-            className="object-cover"
-          />
-        </div>
-      </div>
-
-      <div
-        className="rotate-[3deg] bg-white shadow-md"
-        style={{
-          padding: fl(6),
-          paddingBottom: fl(20),
-          borderRadius: fl(2),
-          marginLeft: fl(-38),
-        }}
-      >
-        <div
-          className="relative overflow-hidden"
-          style={{ width: fl(175), height: fl(180) }}
-        >
-          <Image
-            src={photos[1]}
-            alt=""
-            fill
-            unoptimized
-            sizes="190px"
-            className="object-cover"
-          />
-        </div>
-      </div>
+      <PolaroidCard src={photos[0]} card={pair.left} />
+      <PolaroidCard src={photos[1]} card={pair.right} overlap={pair.overlap} />
     </div>
   );
 }
@@ -142,9 +167,12 @@ export function TimelineSection() {
               </p>
             </div>
 
-            {/* Foto polaroid — di area kanan garis */}
+            {/* Foto polaroid — di area kanan garis, gaya per milestone */}
             <div style={{ marginLeft: "13%" }}>
-              <Polaroids photos={n.photos} />
+              <Polaroids
+                photos={n.photos}
+                pair={PAIR_STYLES[i] ?? PAIR_STYLES[0]}
+              />
             </div>
           </div>
         ))}
