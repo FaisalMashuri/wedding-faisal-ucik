@@ -25,14 +25,19 @@ function EventCard({
 }) {
   return (
     <div
-      className="mx-auto flex w-full max-w-[300px] flex-col items-center border-primary bg-white text-secondary"
+      className="mx-auto flex w-full flex-col items-center border-primary bg-white text-secondary"
       style={{
+        // Lebar ikut menyusut proporsional di layar sempit (bukan tetap 300px),
+        // jadi rasio kartu terhadap layar sama seperti di shell 480px.
+        maxWidth: fluid(300, 0.65),
         minHeight: fluid(284),
         borderRadius: fluid(67),
         borderWidth: 4,
         borderStyle: "solid",
-        paddingLeft: fluid(32),
-        paddingRight: fluid(32),
+        // minRatio disamakan dgn maxWidth di atas supaya proporsi isi thd
+        // lebar kartu tetap sama di layar sempit.
+        paddingLeft: fluid(20, 0.65),
+        paddingRight: fluid(20, 0.65),
         paddingBottom: fluid(20),
         paddingTop: fluid(spacing.topPad),
       }}
@@ -142,14 +147,14 @@ export function EventSection() {
             className="w-full text-center font-sans leading-relaxed text-white/90"
             style={{ fontSize: fluid(12), marginTop: fluid(16) }}
           >
-            By the grace of God, we request the honour of your presence at
-            the marriage of our children :
+            By the grace of God, we request the honour of your <br />
+            presence at the marriage of our children :
           </p>
 
           <div className="w-full" style={{ marginTop: fluid(20) }}>
             <EventCard
               e={akad}
-              spacing={{ topPad: 28, titleGap: 29, titleSize: 32 }}
+              spacing={{ topPad: 28, titleGap: 8, titleSize: 32 }}
             />
           </div>
 

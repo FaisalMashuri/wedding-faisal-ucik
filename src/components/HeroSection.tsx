@@ -26,26 +26,30 @@ export function HeroSection() {
 
         {/* ================= KONTEN AREA PUTIH — knob untuk edit sendiri =========
             Batas kotak putih background: 43%–71.8% tinggi gambar.
-            • Geser SELURUH blok naik/turun  -> ubah `top-[48%]`
-            • Ukuran "F & U"                  -> ubah text-[34px] pada <p> inisial
-            • Ukuran huruf kutipan            -> ubah text-[8px] pada <p> kutipan
-            • Jumlah baris kutipan            -> ubah max-w-[180px] (kecil = baris lbh banyak)
+            • Geser SELURUH blok naik/turun  -> ubah `top-[50.5%]`
+            • Ukuran "U & F"                  -> ubah text-[28px] pada <p> inisial
+            • Jarak inisial ke kutipan        -> ubah mt-[30px] pada <p> kutipan
+            • Ukuran huruf kutipan            -> ubah text-[12px] pada <p> kutipan
+            • Jumlah baris kutipan            -> ubah max-w-[247px] (kecil = baris lbh banyak)
             • Ukuran "QS. Ar-Rum ..."         -> ubah text-[15px] pada <p> sumber
             • Teks kutipan/sumber/inisial     -> di src/config/wedding.ts
             ===================================================================== */}
-        <div className="absolute inset-x-0 top-[48%] px-2 text-secondary">
+        {/* translate-x kecil: area putih di background sedikit ke kanan dari
+            tengah frame, jadi blok teks ikut digeser agar pas di tengahnya. */}
+        <div className="absolute inset-x-0 top-[50.5%] translate-x-[5px] px-2 text-secondary">
           {/* Inisial pasangan — Alice */}
-          <p className="text-center font-serif text-[34px] tracking-[0.15em]">
+          <p className="text-center font-serif text-[28px] tracking-[0.05em]">
             {wedding.initials}
           </p>
 
-          {/* Kutipan — Montserrat (max-w mengatur jumlah baris) */}
-          <p className="mx-auto mt-3 max-w-[180px] font-sans text-[8.5px] font-bold leading-[1.6]">
+          {/* Kutipan — Montserrat, rata kanan-kiri.
+              max-w 247px + text 12px = 7 baris, sama persis dgn desain. */}
+          <p className="mx-auto mt-[30px] max-w-[247px] text-justify font-sans text-[12px] font-bold leading-[1.25]">
             &ldquo;{wedding.quote}&rdquo;
           </p>
 
           {/* Sumber kutipan — script */}
-          <p className="mt-8 text-right font-script text-[15px] leading-none text-secondary/90 mr-16">
+          <p className="mt-3 mr-[100px] text-right font-script text-[15px] leading-none text-secondary/90">
             {wedding.quoteSource}
           </p>
         </div>

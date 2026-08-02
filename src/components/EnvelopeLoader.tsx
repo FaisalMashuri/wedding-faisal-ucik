@@ -40,7 +40,10 @@ const GUEST_FALLBACK = "Tamu Undangan";
 const MIN_LOADER_MS = 2600; // loader minimal tampil selama ini
 const MAX_LOADER_MS = 9000; // pengaman: aset lambat tidak boleh menahan tamu
 
-const ASSET_SOURCES = ["/images/Opening_2.webp"]; // background onboarding
+const ASSET_SOURCES = ["/images/bg-onboard.webp"]; // background onboarding
+// Backsound ikut diunduh di layar loading ini, supaya begitu tamu menekan
+// "Buka Undangan" musiknya langsung bunyi (bukan hening dulu beberapa detik).
+const AUDIO_SOURCE = "/backsound.mp3";
 
 function preload(src: string) {
   return new Promise<void>((resolve) => {
@@ -49,6 +52,20 @@ function preload(src: string) {
     img.onerror = () => resolve(); // gagal muat tidak boleh menggantung loader
     img.src = src;
   });
+}
+
+/**
+ * Menghangatkan HTTP cache lewat `fetch`, bukan lewat elemen <audio>.
+ * Alasannya: iOS Safari mengabaikan `preload` pada elemen media sebelum ada
+ * interaksi tamu, jadi kalau mengandalkan itu file-nya tidak pernah terunduh
+ * di sini. `fetch` biasa tetap jalan di semua browser, dan respons /backsound
+ * punya ETag sehingga request dari <audio> nanti cukup revalidasi (304).
+ */
+function warmCache(url: string) {
+  return fetch(url, { cache: "force-cache" })
+    .then((r) => r.blob())
+    .then(() => undefined)
+    .catch(() => undefined); // gagal unduh tidak boleh menggantung loader
 }
 
 export function EnvelopeLoader() {
@@ -95,12 +112,15 @@ export function EnvelopeLoader() {
       return () => clearTimeout(skip);
     }
 
-    let assetRatio = ASSET_SOURCES.length ? 0 : 1;
+    // Gambar + backsound dihitung sebagai satu daftar tugas yang sama, jadi
+    // bar progres benar-benar mewakili semua yang diunduh di layar ini.
+    const tasks = [...ASSET_SOURCES.map(preload), warmCache(AUDIO_SOURCE)];
+    let assetRatio = 0;
     let done = 0;
-    ASSET_SOURCES.forEach((src) => {
-      preload(src).then(() => {
+    tasks.forEach((task) => {
+      task.then(() => {
         done += 1;
-        assetRatio = done / ASSET_SOURCES.length;
+        assetRatio = done / tasks.length;
       });
     });
 

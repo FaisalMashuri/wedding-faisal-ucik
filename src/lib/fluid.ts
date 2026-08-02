@@ -8,7 +8,12 @@
 export function fluid(px480: number, minRatio = 0.78): string {
   const vw = (px480 / 480) * 100;
   const min = px480 * minRatio;
-  return `clamp(${round(min)}px, ${round(vw, 3)}vw, ${round(px480)}px)`;
+  // clamp() butuh urutan naik. Untuk nilai negatif (mis. margin tarik-masuk)
+  // yang "terbesar" justru px480, jadi batasnya ditukar — kalau tidak, clamp
+  // mengembalikan batas bawah terus dan nilainya jadi mati.
+  return px480 < 0
+    ? `clamp(${round(px480)}px, ${round(vw, 3)}vw, ${round(min)}px)`
+    : `clamp(${round(min)}px, ${round(vw, 3)}vw, ${round(px480)}px)`;
 }
 
 function round(n: number, digits = 1) {

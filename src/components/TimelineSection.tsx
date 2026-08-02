@@ -18,24 +18,26 @@ type CardStyle = { rotate: string; top?: number; onTop?: boolean };
 type PairStyle = { left: CardStyle; right: CardStyle; overlap: number };
 
 const PAIR_STYLES: readonly PairStyle[] = [
-  // 1 — Introduction: kiri miring kiri, lebih rendah, DI ATAS; kanan miring kanan.
+  // 1 — Introduction: kemiringan hampir simetris, kiri lebih rendah,
+  //     kartu KIRI yang menimpa kanan, dua kartu saling menindih rapat.
   {
-    left: { rotate: "rotate-[-7deg]", top: 22, onTop: true },
-    right: { rotate: "rotate-[3deg]" },
-    overlap: -38,
+    left: { rotate: "rotate-[-6deg]", top: 20, onTop: true },
+    right: { rotate: "rotate-[6deg]" },
+    overlap: -40,
   },
-  // 2 — Engagement: dua kartu tegak, kiri lebih rendah, kanan DI ATAS,
-  //     overlap tipis.
+  // 2 — Engagement: miring berlawanan (kiri -5deg, kanan +7deg), kartu KIRI
+  //     yang menimpa kanan, overlap tipis. `top` kanan mengimbangi bounding box
+  //     rotasi yang lebih besar supaya ujung atas kedua kartu rata.
   {
-    left: { rotate: "rotate-0", top: 24 },
-    right: { rotate: "rotate-0", onTop: true },
-    overlap: -10,
+    left: { rotate: "rotate-[-5deg]", onTop: true },
+    right: { rotate: "rotate-[7deg]", top: 18 },
+    overlap: -25,
   },
-  // 3 — Wedding: sementara memakai gaya pasangan pertama (belum ada mock).
+  // 3 — Wedding: sama persis dengan pasangan 2.
   {
-    left: { rotate: "rotate-[-7deg]", top: 22, onTop: true },
-    right: { rotate: "rotate-[3deg]" },
-    overlap: -38,
+    left: { rotate: "rotate-[-5deg]", onTop: true },
+    right: { rotate: "rotate-[7deg]", top: 18 },
+    overlap: -25,
   },
 ];
 
@@ -100,7 +102,7 @@ function Polaroids({
  * Timeline section — "The Path We Walked Together", layout persis Figma:
  * garis putus-putus emas di kiri, tiap milestone = titik emas + judul emas
  * + tempat (putih) + dua polaroid besar di bawahnya.
- * Background: /images/bg-timeline-2.webp (frame Figma 1080×2921).
+ * Background: /images/bg-timeline-3.webp (frame Figma 1080×2921).
  *
  * KNOB edit sendiri: src/config/wedding.ts (`timelineTitle`, `timeline`).
  * Ganti `photos` dengan foto asli tiap milestone.
@@ -110,7 +112,7 @@ export function TimelineSection() {
     <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[1080/2921]">
         <Image
-          src="/images/bg-timeline-2.webp"
+          src="/images/bg-timeline-3.webp"
           alt=""
           fill
           unoptimized

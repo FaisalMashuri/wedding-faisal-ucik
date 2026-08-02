@@ -1,12 +1,17 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Supabase kini memakai istilah "publishable key" (sb_publishable_...) untuk
+// kunci yang memang boleh tampil di browser. Nama lama (anon key) tetap
+// dibaca sebagai cadangan supaya env lama tidak langsung rusak.
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!supabaseUrl || !supabaseKey) {
   // Jangan crash saat build; hanya peringatan agar env diisi sebelum fitur data dipakai.
   console.warn(
-    "Supabase env belum diisi. Set NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY di .env.local"
+    "Supabase env belum diisi. Set NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY di .env.local"
   );
 }
 
@@ -14,6 +19,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // saat env belum diisi (request tetap gagal saat runtime, ditangani di UI).
 export const supabase = createClient(
   supabaseUrl || "https://placeholder.supabase.co",
-  supabaseAnonKey || "placeholder-anon-key"
+  supabaseKey || "placeholder-anon-key"
 );
 

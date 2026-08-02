@@ -4,7 +4,7 @@ export const wedding = {
   bride: "Ucik",
   coupleShort: "Ucik & Faisal",
   // Inisial pasangan (ditampilkan di hero)
-  initials: "F & U",
+  initials: "U & F",
   // Tanggal acara (dipakai countdown)
   dateLong: "Sabtu, 05 September 2026",
   dateISO: "2026-09-05T07:00:00+07:00",
@@ -49,7 +49,7 @@ export const wedding = {
   mapUrl:
     "https://www.google.com/maps/search/?api=1&query=Balai+Desa+Tamanrejo+Limbangan+Kendal",
 
-  // Timeline — layout mengikuti frame Figma 1080×2921 (bg-timeline-2.webp).
+  // Timeline — layout mengikuti frame Figma 1080×2921 (bg-timeline-3.webp).
   // top = posisi vertikal milestone (% tinggi section).
   // Ganti path foto di `photos` (2 foto per milestone) dengan foto asli.
   timelineTitle: "The Path\nWe Walked Together",
@@ -58,19 +58,19 @@ export const wedding = {
       title: "Introduction session : 2021",
       place: "Kampus merdeka by Kemendikbudristek",
       top: 13,
-      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
+      photos: ["/images/row-1.1.webp", "/images/row-1.2.webp"],
     },
     {
       title: "Engagement : 15 May 2026",
       place: "Kopi Kebun Jatisari Semarang",
       top: 41.5,
-      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
+      photos: ["/images/row-2.1.webp", "/images/row-2.2.webp"],
     },
     {
       title: "Wedding : 05 Sept 2026",
       place: "Balai Desa Tamanrejo, Limbangan, Kendal",
       top: 68.5,
-      photos: ["/images/bg-onboard.webp", "/images/bg-onboard.webp"],
+      photos: ["/images/row-3.1.webp", "/images/row-3.2.webp"],
     },
   ],
 

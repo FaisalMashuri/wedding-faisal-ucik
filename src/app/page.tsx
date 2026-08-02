@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
 import { EnvelopeLoader } from "@/components/EnvelopeLoader";
@@ -33,6 +33,20 @@ export default function Home() {
     if (to) setGuestName(to);
   }, [setGuestName]);
 
+  // Backsound: baru dimuat & diputar saat tamu menekan "Buka Undangan".
+  // `play()` WAJIB dipanggil sinkron di dalam handler klik — itu satu-satunya
+  // saat browser (terutama iOS Safari) mengizinkan audio berbunyi.
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  function handleOpen() {
+    open();
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = 0.6;
+    // Kalau tetap ditolak browser, undangan harus tetap terbuka normal.
+    audio.play().catch(() => {});
+  }
+
   // Section undangan berat (banyak gambar besar) baru di-mount SETELAH loader
   // amplop selesai — supaya hydration + decode gambarnya tidak berebut main
   // thread dengan animasi amplop. Dipasang saat browser senggang agar tidak
@@ -53,6 +67,10 @@ export default function Home() {
     <main className="relative h-full">
       {/* Amplop loading — terbuka lalu menghilang, mengungkap onboarding di baliknya */}
       <EnvelopeLoader />
+
+      {/* Backsound — preload="none" supaya 4MB-nya tidak ikut terunduh
+          sebelum tamu benar-benar membuka undangan. */}
+      <audio ref={audioRef} src="/backsound.mp3" loop preload="none" />
 
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
       <div
@@ -81,7 +99,7 @@ export default function Home() {
         {/* Background foto — zoom perlahan (Ken Burns) */}
         <div className="anim-ken-burns absolute inset-0">
           <Image
-            src="/images/Opening_2.webp"
+            src="/images/bg-onboard.webp"
             alt="Foto pasangan"
             fill
             priority
@@ -137,7 +155,7 @@ export default function Home() {
             style={{ animationDelay: "1.6s" }}
           >
             <button
-              onClick={open}
+              onClick={handleOpen}
               className="anim-glow anim-shine cursor-pointer rounded-lg border border-primary-dark/40 bg-primary px-10 py-2 font-sans text-[10px] font-medium uppercase tracking-[0.15em] text-secondary shadow-lg transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.97]"
             >
               Buka Undangan

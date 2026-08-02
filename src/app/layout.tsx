@@ -8,6 +8,7 @@ import {
   Cormorant_Garamond,
 } from "next/font/google";
 import localFont from "next/font/local";
+import { wedding } from "@/config/wedding";
 import "./globals.css";
 
 // Montserrat Subrayada (underline bawaan) — dari file lokal
@@ -69,7 +70,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "The Wedding Of",
+  title: `The Wedding Of ${wedding.coupleShort}`,
   description: "Undangan pernikahan",
   formatDetection: {
     telephone: false,
