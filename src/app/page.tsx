@@ -11,6 +11,7 @@ import { TimelineSection } from "@/components/TimelineSection";
 import { RsvpSection } from "@/components/RsvpSection";
 import { OutroSection } from "@/components/OutroSection";
 import { wedding } from "@/config/wedding";
+import { findTrack } from "@/lib/tracks";
 
 /*
   Ukuran font onboarding (diperhalus agar lebih aesthetic):
@@ -26,6 +27,11 @@ export default function Home() {
   const open = useOnboardingStore((s) => s.open);
   const guestName = useOnboardingStore((s) => s.guestName);
   const setGuestName = useOnboardingStore((s) => s.setGuestName);
+  // Lagu yang dipilih tamu di popup layar loader. Sudah terpasang jauh sebelum
+  // tombol "Buka Undangan" ditekan, jadi tidak ada perubahan `src` di dalam
+  // gesture klik (yang bisa membatalkan izin autoplay iOS).
+  const trackId = useOnboardingStore((s) => s.trackId);
+  const trackSrc = findTrack(trackId)?.src;
 
   // Ambil nama tamu dari query param ?to=Nama
   useEffect(() => {
@@ -68,9 +74,12 @@ export default function Home() {
       {/* Amplop loading — terbuka lalu menghilang, mengungkap onboarding di baliknya */}
       <EnvelopeLoader />
 
-      {/* Backsound — preload="none" supaya 4MB-nya tidak ikut terunduh
-          sebelum tamu benar-benar membuka undangan. */}
-      <audio ref={audioRef} src="/backsound.mp3" loop preload="none" />
+      {/* Backsound — lagu pilihan tamu. preload="none" karena file-nya sudah
+          dihangatkan ke cache di layar loader; elemen ini cukup ambil dari
+          sana saat diputar. */}
+      {trackSrc && (
+        <audio ref={audioRef} src={trackSrc} loop preload="none" />
+      )}
 
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
       <div

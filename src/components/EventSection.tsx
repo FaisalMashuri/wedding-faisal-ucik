@@ -29,8 +29,8 @@ function EventCard({
       style={{
         // Lebar ikut menyusut proporsional di layar sempit (bukan tetap 300px),
         // jadi rasio kartu terhadap layar sama seperti di shell 480px.
-        maxWidth: fluid(300, 0.65),
-        minHeight: fluid(284),
+        maxWidth: fluid(310, 0.65),
+        minHeight: fluid(250),
         borderRadius: fluid(67),
         borderWidth: 4,
         borderStyle: "solid",
