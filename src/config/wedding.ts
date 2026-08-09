@@ -13,6 +13,65 @@ export const wedding = {
     "And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them. And He has placed between you compassion and mercy. Surely in this are signs for people who reflect.",
   quoteSource: "QS. Ar-Rum ayat 21",
 
+  // Pilihan backsound — ditawarkan ke tamu lewat popup di layar loader.
+  // Urutan di sini = urutan di popup, dan entri PERTAMA dipakai sebagai
+  // default untuk tamu ber-`prefers-reduced-motion` (loader dilewati seketika
+  // jadi popup tidak sempat tampil).
+  // Tambah/hapus lagu cukup di sini — file taruh di public/audio/.
+  tracks: [
+    {
+      id: "perfect-violin",
+      title: "Perfect",
+      by: "Ed Sheeran · Violin cover",
+      src: "/audio/perfect-violin.mp3",
+    },
+    {
+      id: "perfect-sax",
+      title: "Perfect",
+      by: "Ed Sheeran · Saxophone cover",
+      src: "/audio/perfect-sax.mp3",
+    },
+    {
+      id: "cant-help-falling-violin",
+      title: "Can't Help Falling In Love",
+      by: "Elvis Presley · Violin cover",
+      src: "/audio/cant-help-falling-violin.mp3",
+    },
+    {
+      id: "cant-help-falling-sax",
+      title: "Can't Help Falling In Love",
+      by: "Elvis Presley · Saxophone cover",
+      src: "/audio/cant-help-falling-sax.mp3",
+    },
+    {
+      id: "until-i-found-you-violin",
+      title: "Until I Found You",
+      by: "Stephen Sanchez · Violin cover",
+      src: "/audio/until-i-found-you-violin.mp3",
+    },
+    // TODO: tiga file di bawah asalnya `videoplayback*.m4a` — tidak punya tag
+    // judul sama sekali. Ganti `title`/`by`-nya kalau sudah tahu lagunya
+    // (cukup di sini, komponen tidak perlu disentuh).
+    {
+      id: "instrumental-1",
+      title: "Instrumental 1",
+      by: "Belum berjudul",
+      src: "/audio/instrumental-1.m4a",
+    },
+    {
+      id: "instrumental-2",
+      title: "Instrumental 2",
+      by: "Belum berjudul",
+      src: "/audio/instrumental-2.m4a",
+    },
+    {
+      id: "instrumental-3",
+      title: "Instrumental 3",
+      by: "Belum berjudul",
+      src: "/audio/instrumental-3.m4a",
+    },
+  ],
+
   // Perkenalan mempelai (Event section)
   couple: {
     bride: {
