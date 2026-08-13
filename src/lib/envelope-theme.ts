@@ -1,8 +1,4 @@
-/**
- * Palet layar loader amplop (pos udara vintage).
- * Dipakai bareng oleh `EnvelopeLoader` dan `SongPicker` — ditaruh di satu
- * tempat supaya kertas/aksen keduanya tidak pernah melenceng warnanya.
- */
+/** Palet layar loader amplop (pos udara vintage). */
 
 /** Latar teal brand (identik dengan body di layout.tsx). */
 export const TEAL_GRADIENT =
@@ -17,10 +13,3 @@ export const PAPER = "#F3EDE1";
 
 export const SEAL_GRADIENT =
   "radial-gradient(circle at 34% 30%, #C9483A, #8E2318 70%)";
-
-/** Merah stempel/segel — aksen teks di atas kertas. */
-export const INK_RED = "#B23A2E";
-/** Tinta utama di atas kertas. */
-export const INK = "#22201C";
-/** Tinta sekunder (keterangan kecil). */
-export const INK_MUTED = "#6B6455";
