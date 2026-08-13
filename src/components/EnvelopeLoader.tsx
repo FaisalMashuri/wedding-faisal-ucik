@@ -5,8 +5,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useOnboardingStore } from "@/store/onboarding";
 import { wedding } from "@/config/wedding";
-import { SongPicker } from "./SongPicker";
-import { DEFAULT_TRACK, type Track } from "@/lib/tracks";
 import {
   ENV_BACK,
   ENV_FLAP,
@@ -20,9 +18,8 @@ import {
   Loading screen sebelum onboarding — amplop pos udara vintage
   (transkrip setia dari referensi HTML yang disetujui).
   - Amplop 400×258 diskalakan lewat var --s agar muat di shell 480px.
-  - Progres dua fase: 0→92% menyiapkan gambar (plus waktu minimum), lalu
-    berhenti menunggu tamu memilih lagu di popup, dan 92→100% mengunduh
-    lagu yang dipilih itu. Batas maksimum menjaga tamu berkoneksi lambat.
+  - Progres = yang paling lambat antara aset asli dan waktu minimum;
+    batas maksimum menjaga tamu berkoneksi lambat.
   - Saat siap: segel lilin menyusut, flap terbuka (rotateX), flap turun
     ke belakang, surat naik, lalu surat "memuai" jadi lembar penuh yang
     larut ke layar onboarding di baliknya.
@@ -39,12 +36,11 @@ const GUEST_FALLBACK = "Tamu Undangan";
 
 const MIN_LOADER_MS = 2600; // loader minimal tampil selama ini
 const MAX_LOADER_MS = 9000; // pengaman: aset lambat tidak boleh menahan tamu
-const MAX_AUDIO_WAIT_MS = 6000; // lagu lambat pun tidak boleh menahan tamu
-const PICKER_DELAY_MS = 1000; // popup muncul setelah amplop selesai masuk
-/** Batas fase A. Bar berhenti di sini selama tamu belum memilih lagu. */
-const GATE_PCT = 92;
 
 const ASSET_SOURCES = ["/images/bg-onboard.webp"]; // background onboarding
+// Backsound ikut diunduh di layar loading ini, supaya begitu tamu menekan
+// "Buka Undangan" musiknya langsung bunyi (bukan hening dulu beberapa detik).
+const AUDIO_SOURCE = wedding.backsound;
 
 function preload(src: string) {
   return new Promise<void>((resolve) => {
@@ -59,7 +55,7 @@ function preload(src: string) {
  * Menghangatkan HTTP cache lewat `fetch`, bukan lewat elemen <audio>.
  * Alasannya: iOS Safari mengabaikan `preload` pada elemen media sebelum ada
  * interaksi tamu, jadi kalau mengandalkan itu file-nya tidak pernah terunduh
- * di sini. `fetch` biasa tetap jalan di semua browser, dan respons file audio
+ * di sini. `fetch` biasa tetap jalan di semua browser, dan respons backsound
  * punya ETag sehingga request dari <audio> nanti cukup revalidasi (304).
  */
 function warmCache(url: string) {
@@ -74,12 +70,6 @@ export function EnvelopeLoader() {
 
   const [visible, setVisible] = useState(true);
   const [phase, setPhase] = useState<"idle" | "opening">("idle");
-  const [showPicker, setShowPicker] = useState(false);
-
-  // Status unduhan lagu pilihan tamu. Disimpan di ref (bukan state) karena
-  // yang membacanya adalah loop `gsap.ticker` di bawah — tidak perlu memicu
-  // render ulang tiap kali berubah.
-  const audioRef = useRef({ started: false, ready: false, startAt: 0 });
 
   const rootRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -108,23 +98,20 @@ export function EnvelopeLoader() {
     return () => window.removeEventListener("resize", fitEnvelope);
   }, []);
 
-  // ---- Progres: aset + pilihan lagu tamu (ditulis langsung ke DOM) ----
+  // ---- Progres: aset asli vs waktu minimum (ditulis langsung ke DOM) ----
   useEffect(() => {
-    // Hormati preferensi kurangi-gerak: langsung ke onboarding tanpa teater.
-    // Popup lagu tidak sempat tampil di jalur ini, jadi pakai lagu default —
-    // kalau tidak, tamu tersebut tidak akan dapat musik sama sekali.
+    // Hormati preferensi kurangi-gerak: langsung ke onboarding tanpa teater
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const skip = setTimeout(() => {
-        useOnboardingStore.getState().setTrack(DEFAULT_TRACK.id);
         useOnboardingStore.getState().finishLoader();
         setVisible(false);
       }, 0);
       return () => clearTimeout(skip);
     }
 
-    // Fase A — gambar onboarding. Lagu TIDAK ikut di sini: tamu belum memilih,
-    // dan mengunduh delapan lagu sekaligus jelas mubazir.
-    const tasks = ASSET_SOURCES.map(preload);
+    // Gambar + backsound dihitung sebagai satu daftar tugas yang sama, jadi
+    // bar progres benar-benar mewakili semua yang diunduh di layar ini.
+    const tasks = [...ASSET_SOURCES.map(preload), warmCache(AUDIO_SOURCE)];
     let assetRatio = 0;
     let done = 0;
     tasks.forEach((task) => {
@@ -133,8 +120,6 @@ export function EnvelopeLoader() {
         assetRatio = done / tasks.length;
       });
     });
-
-    const pickerTimer = setTimeout(() => setShowPicker(true), PICKER_DELAY_MS);
 
     const startAt = Date.now();
     let opened = false;
@@ -145,21 +130,7 @@ export function EnvelopeLoader() {
       const elapsed = Date.now() - startAt;
       if (elapsed > MAX_LOADER_MS) assetRatio = 1;
 
-      // Fase A mengisi 0..GATE_PCT, dan berhenti di situ selama tamu belum
-      // memilih lagu — itulah "gerbang"-nya.
-      const baseRatio = Math.min(assetRatio, elapsed / MIN_LOADER_MS);
-      let target = baseRatio * GATE_PCT;
-
-      // Fase B — sisa GATE_PCT..100 mengikuti unduhan lagu terpilih.
-      const audio = audioRef.current;
-      if (audio.started && baseRatio >= 1) {
-        const waited = Date.now() - audio.startAt;
-        const audioRatio =
-          audio.ready || waited > MAX_AUDIO_WAIT_MS
-            ? 1
-            : Math.min(waited / MAX_AUDIO_WAIT_MS, 0.95);
-        target = GATE_PCT + (100 - GATE_PCT) * audioRatio;
-      }
+      const target = Math.min(assetRatio, elapsed / MIN_LOADER_MS) * 100;
 
       // Lerp ke target: kalau main thread sempat macet (hydration, decode
       // gambar), bar mengejar dengan mulus alih-alih teleport (mis. 9%→50%).
@@ -169,12 +140,8 @@ export function EnvelopeLoader() {
       const pct = Math.round(shownPct);
       if (barFillRef.current) barFillRef.current.style.width = `${pct}%`;
       if (pctRef.current) pctRef.current.textContent = `${pct}%`;
-      if (statusTextRef.current && pct < 100) {
-        statusTextRef.current.textContent = !audio.started
-          ? pct >= GATE_PCT
-            ? "Pilih lagu pengiring" // bar sengaja menunggu jawaban tamu
-            : "Menyiapkan aset"
-          : "Menyiapkan lagu";
+      if (pct > 55 && pct < 100 && statusTextRef.current) {
+        statusTextRef.current.textContent = "Hampir siap";
       }
 
       if (shownPct >= 100 && !opened) {
@@ -188,26 +155,8 @@ export function EnvelopeLoader() {
     };
 
     gsap.ticker.add(tick);
-    return () => {
-      gsap.ticker.remove(tick);
-      clearTimeout(pickerTimer);
-    };
+    return () => gsap.ticker.remove(tick);
   }, []);
-
-  /**
-   * Tamu memilih lagu. Unduhan dimulai SEKARANG (bukan setelah popup selesai
-   * beranimasi) supaya waktu tutupnya popup terpakai untuk mengunduh.
-   */
-  function handlePickTrack(track: Track) {
-    useOnboardingStore.getState().setTrack(track.id);
-    const audio = audioRef.current;
-    if (audio.started) return;
-    audio.started = true;
-    audio.startAt = Date.now();
-    warmCache(track.src).then(() => {
-      audio.ready = true;
-    });
-  }
 
   // ---- Surat memuai jadi lembar penuh, lalu larut ke onboarding ----
   function expandToPage() {
@@ -434,12 +383,6 @@ export function EnvelopeLoader() {
           0%
         </p>
       </div>
-
-      {/* Popup pilih lagu — muncul selagi bar mengisi, menutup sendiri setelah
-          dipilih. Ditaruh sebelum cover (dan z-nya lebih rendah) supaya kalau
-          lagunya sudah ter-cache dan amplop langsung terbuka, popup yang masih
-          memudar tidak menutupi lembar penyambung. */}
-      {showPicker && <SongPicker onPick={handlePickTrack} />}
 
       {/* Lembar penyambung — surat memuai jadi halaman (FLIP, transform saja) */}
       <div

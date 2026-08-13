@@ -232,13 +232,6 @@ body {
   );
 }
 
-/* Pilihan lagu di popup loader. Outline fokus bawaan browser (hitam tebal)
-   terlalu mencolok di atas kertas krem — ganti dengan tinta merah stempel. */
-.song-option:focus-visible {
-  outline: 2px solid #b23a2e;
-  outline-offset: 2px;
-}
-
 /* Bayangan lembut di bawah amplop */
 .env-under-shadow {
   background: radial-gradient(
