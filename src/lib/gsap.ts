@@ -66,10 +66,29 @@ export const DUR = 0.6; // detik
 export const STAGGER = 0.09; // jeda antar elemen bersaudara
 
 /**
+ * Titik picu reveal: elemen mulai muncul saat ujung ATASNYA SENDIRI menyentuh
+ * 88% tinggi layar — yaitu tepat ketika ia benar-benar menyembul dari bawah.
+ *
+ * Nilai ini dibaca terhadap ELEMEN, bukan section. Memicu dari section membuat
+ * seluruh isinya menyala begitu ujung atas section terlihat, padahal sebagian
+ * masih jauh di bawah lipatan — animasinya jadi habis sebelum tamu sampai.
+ */
+export const REVEAL_START_PCT = 88;
+export const REVEAL_START = `top ${REVEAL_START_PCT}%`;
+
+/**
+ * Patokan cadangan untuk elemen yang TIDAK PERNAH bisa mencapai garis di atas:
+ * yang duduk di dasar section terakhir (mis. disclaimer Outro) berhenti jauh
+ * di bawah 88% karena halaman sudah mentok. Tanpa ini mereka tidak pernah
+ * muncul sama sekali. Dipilih otomatis di useReveal, bukan disetel manual.
+ */
+export const REVEAL_START_FALLBACK = "top bottom";
+
+/**
  * Preset ScrollTrigger untuk reveal sekali-jalan di dalam container kustom.
  * `once: true` — tidak mengulang saat tamu scroll balik ke atas.
  */
-export function revealST(trigger: Element, start = "top 82%") {
+export function revealST(trigger: Element, start: string = REVEAL_START) {
   return { trigger, scroller: getScroller() ?? undefined, start, once: true };
 }
 
