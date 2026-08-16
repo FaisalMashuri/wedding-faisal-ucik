@@ -165,6 +165,15 @@ body {
   );
 }
 
+/* Padanan klik-kanan di ponsel adalah tahan-lama pada gambar. Android
+   memicu event `contextmenu` (ditangani ContentGuard), tapi iOS Safari
+   memunculkan menu "Save Image" tanpa event apa pun — hanya properti ini
+   yang menahannya. Sengaja cuma di <img>: kalau dipasang global, tamu tidak
+   bisa lagi tahan-lama untuk menempel teks di kolom ucapan. */
+img {
+  -webkit-touch-callout: none;
+}
+
 /* Sembunyikan scrollbar tapi tetap bisa discroll (semua browser) */
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */

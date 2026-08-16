@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
 import { gsap, useGSAP, ensureGsap, ScrollTrigger, EASE } from "@/lib/gsap";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { ContentGuard } from "@/components/ContentGuard";
 import { EnvelopeLoader } from "@/components/EnvelopeLoader";
 import { HeroSection } from "@/components/HeroSection";
 import { CoupleSection } from "@/components/CoupleSection";
@@ -132,6 +133,10 @@ export default function Home() {
 
   return (
     <main className="relative h-full">
+      {/* Penahan klik-kanan & pintasan devtools. Hanya di halaman undangan —
+          /design-system sengaja dibiarkan bisa diinspeksi. */}
+      <ContentGuard />
+
       {/* Amplop loading — terbuka lalu menghilang, mengungkap onboarding di baliknya */}
       <EnvelopeLoader />
 
