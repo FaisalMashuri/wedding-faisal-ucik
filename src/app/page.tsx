@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
-import { gsap, useGSAP, ScrollTrigger, EASE } from "@/lib/gsap";
+import { gsap, useGSAP, ensureGsap, ScrollTrigger, EASE } from "@/lib/gsap";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import { EnvelopeLoader } from "@/components/EnvelopeLoader";
 import { HeroSection } from "@/components/HeroSection";
@@ -86,6 +86,7 @@ export default function Home() {
     () => {
       const root = overlayRef.current;
       if (!root || !loaderDone) return;
+      ensureGsap();
       const items = Array.from(
         root.querySelectorAll<HTMLElement>(".js-onboard")
       );

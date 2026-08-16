@@ -1,7 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, revealST, EASE, RISE, DUR, STAGGER } from "@/lib/gsap";
+import {
+  gsap,
+  useGSAP,
+  ensureGsap,
+  revealST,
+  EASE,
+  RISE,
+  DUR,
+  STAGGER,
+} from "@/lib/gsap";
 
 /** Class penanda elemen yang ikut reveal. Ditulis di JSX section. */
 export const REVEAL = "js-reveal";
@@ -34,6 +43,7 @@ export function useReveal<T extends HTMLElement>(opts: Options = {}) {
     () => {
       const root = scope.current;
       if (!root) return;
+      ensureGsap();
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

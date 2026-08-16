@@ -7,6 +7,7 @@ import { fluid as fluidBase } from "@/lib/fluid";
 import {
   gsap,
   useGSAP,
+  ensureGsap,
   getScroller,
   revealST,
   EASE,
@@ -154,6 +155,7 @@ export function TimelineSection() {
       const line = lineRef.current;
       const title = titleRef.current;
       if (!root || !frame || !line || !title) return;
+      ensureGsap();
       const scroller = getScroller() ?? undefined;
 
       const mm = gsap.matchMedia();

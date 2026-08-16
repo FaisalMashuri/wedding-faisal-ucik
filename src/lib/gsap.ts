@@ -4,10 +4,24 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-// Registrasi sekali di satu tempat. Semua komponen yang butuh GSAP mengimpor
-// dari modul ini, bukan dari "gsap" langsung — supaya tidak ada komponen yang
-// jalan sebelum plugin-nya terdaftar.
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+/**
+ * Registrasi sekali di satu tempat, tapi SENGAJA bukan di module scope.
+ *
+ * Modul client dievaluasi sebelum React hydrate. Menjalankan registerPlugin di
+ * sana membuat ScrollTrigger menyentuh inline style <body>, yang memaksa
+ * browser menulis ulang style itu (shorthand mekar jadi longhand, `#4a7883`
+ * jadi `rgb(74, 120, 131)`). Atribut hasilnya lalu berbeda dari HTML server dan
+ * React melaporkan ketidakcocokan hydration.
+ *
+ * Dipanggil dari dalam callback useGSAP, yang jalan di layout effect — setelah
+ * hydration selesai, jadi tidak ada yang bisa berselisih lagi.
+ */
+let registered = false;
+export function ensureGsap() {
+  if (registered) return;
+  registered = true;
+  gsap.registerPlugin(useGSAP, ScrollTrigger);
+}
 
 /**
  * Yang discroll di undangan ini BUKAN window, tapi div ber-overflow di

@@ -5,7 +5,7 @@ import { wedding } from "@/config/wedding";
 import { fluid } from "@/lib/fluid";
 import { useRef } from "react";
 import { useReveal, REVEAL } from "@/hooks/useReveal";
-import { gsap, useGSAP, getScroller } from "@/lib/gsap";
+import { gsap, useGSAP, ensureGsap, getScroller } from "@/lib/gsap";
 
 /**
  * Outro section — penutup, full satu layar.
@@ -31,6 +31,7 @@ export function OutroSection() {
       const frame = frameRef.current;
       const img = frame?.querySelector("img");
       if (!frame || !img) return;
+      ensureGsap();
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
