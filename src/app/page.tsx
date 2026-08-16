@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
+import { ScrollTrigger } from "@/lib/gsap";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 import { EnvelopeLoader } from "@/components/EnvelopeLoader";
 import { HeroSection } from "@/components/HeroSection";
 import { CoupleSection } from "@/components/CoupleSection";
@@ -63,6 +65,24 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [loaderDone, sectionsReady]);
 
+  // ScrollTrigger mengukur posisi saat dibuat. Dua hal membuat ukuran itu basi:
+  // section baru di-mount belakangan (tinggi container melonjak), dan
+  // EventSection tidak dikunci aspect-ratio sehingga tingginya bergeser saat
+  // font selesai swap. Ukur ulang setelah keduanya beres.
+  useEffect(() => {
+    if (!sectionsReady) return;
+    let done = false;
+    const refresh = () => {
+      if (!done) ScrollTrigger.refresh();
+    };
+    document.fonts?.ready.then(refresh);
+    const t = setTimeout(refresh, 1500); // jaga-jaga kalau fonts.ready tak pernah selesai
+    return () => {
+      done = true;
+      clearTimeout(t);
+    };
+  }, [sectionsReady]);
+
   return (
     <main className="relative h-full">
       {/* Amplop loading — terbuka lalu menghilang, mengungkap onboarding di baliknya */}
@@ -72,19 +92,26 @@ export default function Home() {
           di layar loader; elemen ini cukup ambil dari sana saat diputar. */}
       <audio ref={audioRef} src={wedding.backsound} loop preload="none" />
 
-      {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka */}
+      {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka.
+          `id` dipakai ScrollTrigger sebagai `scroller`: yang bergerak di sini
+          div ini, bukan window (shell-nya h-dvh overflow-hidden). */}
       <div
+        id="invite-scroll"
         className={`no-scrollbar h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
       >
+        {/* MotionProvider hanya membungkus section, bukan seluruh halaman:
+            chunk fitur Motion baru mulai diunduh saat blok ini mount — yaitu
+            setelah loader amplop selesai — jadi nol beban di jalur kritis.
+            Loader & onboarding murni GSAP/CSS, tidak butuh Motion. */}
         {sectionsReady && (
-          <>
+          <MotionProvider>
             <HeroSection />
             <CoupleSection />
             <EventSection />
             <TimelineSection />
             <RsvpSection />
             <OutroSection />
-          </>
+          </MotionProvider>
         )}
       </div>
 
