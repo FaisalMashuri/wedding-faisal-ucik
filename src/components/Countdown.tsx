@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { wedding } from "@/config/wedding";
 import { fluid } from "@/lib/fluid";
+import { REVEAL } from "@/hooks/useReveal";
 
 function calc(target: number) {
   const diff = Math.max(0, target - Date.now());
@@ -59,7 +60,8 @@ export function Countdown() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
+    // REVEAL: ikut rangkaian reveal EventSection (hook-nya ada di parent).
+    <div className={`${REVEAL} flex flex-col items-center`}>
       {/* Ukuran diset agar lebar teks pas sama lebar kotak putih di bawahnya
           (Alike 22px ≈ 188px = pad 40 + 3 unit 108 + 4 gap 32 + 2 sep) */}
       <p

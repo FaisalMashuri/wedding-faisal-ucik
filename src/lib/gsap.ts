@@ -17,6 +17,25 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
  */
 export const SCROLLER = "#invite-scroll";
 
+/**
+ * Scroller WAJIB diserahkan ke ScrollTrigger sebagai elemen, bukan string.
+ * useGSAP membungkus callback-nya dalam gsap.context(fn, scope), dan di dalam
+ * context ber-scope semua selector string diresolusi relatif terhadap scope
+ * itu — sedangkan #invite-scroll adalah LELUHUR section, bukan keturunannya.
+ * Kalau dikirim sebagai string, ScrollTrigger tidak menemukannya dan melempar
+ * "Cannot read properties of undefined (reading '_gsap')".
+ */
+export function getScroller(): HTMLElement | null {
+  const el = document.querySelector<HTMLElement>(SCROLLER);
+  if (!el && process.env.NODE_ENV !== "production") {
+    console.warn(
+      `[gsap] ${SCROLLER} tidak ditemukan — ScrollTrigger akan jatuh ke window ` +
+        `dan reveal terpicu di waktu yang salah.`
+    );
+  }
+  return el;
+}
+
 /* ---- Bahasa gerak bersama: halus & elegan ----
    EASE sengaja padanan cubic-bezier(.22,.61,.36,1) yang dipakai onboarding,
    supaya seluruh situs terasa satu suara. */
@@ -31,7 +50,7 @@ export const STAGGER = 0.09; // jeda antar elemen bersaudara
  * `once: true` — tidak mengulang saat tamu scroll balik ke atas.
  */
 export function revealST(trigger: Element, start = "top 82%") {
-  return { trigger, scroller: SCROLLER, start, once: true } as const;
+  return { trigger, scroller: getScroller() ?? undefined, start, once: true };
 }
 
 export { gsap, ScrollTrigger, useGSAP };

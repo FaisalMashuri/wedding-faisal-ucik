@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 import { Countdown } from "./Countdown";
 import { fluid } from "@/lib/fluid";
+import { useReveal, REVEAL } from "@/hooks/useReveal";
 
 type Schedule = { title: string; time: string; location: string };
 
@@ -118,9 +121,13 @@ function EventCard({
  */
 export function EventSection() {
   const [akad, reception] = wedding.schedule;
+  const scope = useReveal<HTMLElement>();
 
   return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
+    <section
+      ref={scope}
+      className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]"
+    >
       <div className="relative w-full" style={{ minHeight: fluid(280) }}>
         <Image
           src="/images/bg-save-the-date.webp"
@@ -144,21 +151,21 @@ export function EventSection() {
           <Countdown />
 
           <p
-            className="w-full text-center font-sans leading-relaxed text-white/90"
+            className={`${REVEAL} w-full text-center font-sans leading-relaxed text-white/90`}
             style={{ fontSize: fluid(12), marginTop: fluid(16) }}
           >
             By the grace of God, we request the honour of your <br />
             presence at the marriage of our children :
           </p>
 
-          <div className="w-full" style={{ marginTop: fluid(20) }}>
+          <div className={`${REVEAL} w-full`} style={{ marginTop: fluid(20) }}>
             <EventCard
               e={akad}
               spacing={{ topPad: 28, titleGap: 8, titleSize: 32 }}
             />
           </div>
 
-          <div className="w-full" style={{ marginTop: fluid(43) }}>
+          <div className={`${REVEAL} w-full`} style={{ marginTop: fluid(43) }}>
             <EventCard
               e={reception}
               mapUrl={wedding.mapUrl}
