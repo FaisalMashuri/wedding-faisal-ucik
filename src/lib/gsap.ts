@@ -41,6 +41,12 @@ export function getScroller(): HTMLElement | null {
    supaya seluruh situs terasa satu suara. */
 export const EASE = "power2.out";
 export const EASE_SETTLE = "power3.out";
+/**
+ * EASE yang sama dalam bentuk cubic-bezier, untuk yang bukan GSAP (Motion).
+ * Ditaruh di sini supaya kurva gerak situs ini punya satu sumber kebenaran.
+ * Tuple, bukan `as const`: readonly array tidak memenuhi tipe Easing Motion.
+ */
+export const EASE_CSS: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 export const RISE = 20; // px — jarak naik saat muncul
 export const DUR = 0.6; // detik
 export const STAGGER = 0.09; // jeda antar elemen bersaudara
