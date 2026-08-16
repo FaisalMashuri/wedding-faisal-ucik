@@ -9,12 +9,10 @@ import {
   useGSAP,
   ensureGsap,
   getScroller,
-  revealST,
+  REVEAL_START,
   EASE,
   EASE_SETTLE,
   RISE,
-  DUR,
-  STAGGER,
 } from "@/lib/gsap";
 
 // Skala murni proporsional (tanpa floor): layout harus identik dengan frame
@@ -160,13 +158,27 @@ export function TimelineSection() {
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
+        /* Seluruh isi timeline di-SCRUB, bukan sekali-jalan.
+           Progres animasinya diikat ke posisi scroll: digulir setengah, ia
+           berhenti di setengah dan bertahan di situ; digulir naik, ia mundur
+           proporsional. Ini beda dari empat section lain yang sengaja tetap
+           sekali-jalan — di sini gerakannya jadi seirama dengan garis emas
+           yang memang sudah scrub sejak awal.
+
+           `end` menentukan sepanjang berapa guliran animasi itu terbentang;
+           makin jauh dari `start`, makin lambat dan makin terasa "ketahan". */
         gsap.set(title, { opacity: 0, y: RISE });
         gsap.to(title, {
           opacity: 1,
           y: 0,
-          duration: DUR,
           ease: EASE,
-          scrollTrigger: revealST(frame, "top 90%"),
+          scrollTrigger: {
+            trigger: title,
+            scroller,
+            start: REVEAL_START,
+            end: "top 62%",
+            scrub: true,
+          },
         });
 
         // Garis emas menggambar dirinya seiring scroll. `scrub` sengaja: ini
@@ -192,56 +204,63 @@ export function TimelineSection() {
         // Kalau dipasang per section, ketiganya menyala serempak saat yang
         // pertama masuk layar dan efeknya hilang.
         root.querySelectorAll<HTMLElement>(".js-milestone").forEach((ms) => {
-          // Objek config dibuat baru tiap tween — ScrollTrigger menyimpan &
-          // memodifikasi config yang dioper, jadi jangan dipakai bersama.
-          const st = () => ({
-            trigger: ms,
+          // `el` menentukan APA yang dipakai sebagai patokan: polaroid ada
+          // ratusan piksel di bawah judul milestone, jadi dia harus memicu
+          // dari kotaknya sendiri, bukan dari ujung atas milestone.
+          const scrub = (el: Element, end: string) => ({
+            trigger: el,
             scroller,
-            start: "top 85%",
-            once: true,
+            start: REVEAL_START,
+            end,
+            scrub: true,
           });
 
-          const dot = ms.querySelector<HTMLElement>(".js-dot");
-          if (dot) {
-            gsap.set(dot, { scale: 0.3, opacity: 0 });
-            gsap.to(dot, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.45,
-              ease: "back.out(1.4)",
-              scrollTrigger: st(),
-            });
-          }
-
           const text = ms.querySelector<HTMLElement>(".js-ms-text");
-          if (text) {
+          const dot = ms.querySelector<HTMLElement>(".js-dot");
+
+          // Titik & blok teks sebaris, jadi satu timeline saja dengan patokan
+          // blok teks — keduanya bergerak bersamaan mengikuti guliran.
+          if (text && dot) {
+            gsap.set(dot, { scale: 0.3, opacity: 0 });
             gsap.set(text, { opacity: 0, y: RISE });
-            gsap.to(text, {
-              opacity: 1,
-              y: 0,
-              duration: DUR,
-              ease: EASE,
-              delay: STAGGER,
-              scrollTrigger: st(),
-            });
+            gsap
+              .timeline({ scrollTrigger: scrub(text, "top 60%") })
+              .to(dot, { scale: 1, opacity: 1, ease: EASE, duration: 1 }, 0)
+              .to(text, { opacity: 1, y: 0, ease: EASE, duration: 1 }, 0.2);
           }
 
           // Polaroid meluncur dari sisinya lalu MENDARAT di kemiringan Figma:
           // rotate 0 -> nilai aslinya, jadi kartunya terasa "diletakkan".
-          ms.querySelectorAll<HTMLElement>(".js-polaroid").forEach((card, i) => {
-            const rot = Number(card.dataset.rotate ?? 0);
-            const dir = Number(card.dataset.dir ?? -1);
-            gsap.set(card, { opacity: 0, x: 26 * dir, rotate: 0 });
-            gsap.to(card, {
-              opacity: 1,
-              x: 0,
-              rotate: rot,
-              duration: 0.7,
-              ease: EASE_SETTLE,
-              delay: 0.18 + i * 0.12,
-              scrollTrigger: st(),
+          // Patokannya kotak polaroid itu sendiri — letaknya jauh di bawah
+          // judul milestone, jadi kalau ikut memicu dari milestone dia sudah
+          // selesai beranimasi sebelum sempat terlihat.
+          //
+          // Satu timeline untuk sepasang kartu: offset 0.35 memberi rasa
+          // berurutan yang, karena di-scrub, ikut maju-mundur bersama guliran
+          // alih-alih berjalan sendiri memakai jam.
+          const pair = ms.querySelector<HTMLElement>(".js-polaroids");
+          const cards = [...ms.querySelectorAll<HTMLElement>(".js-polaroid")];
+          if (pair && cards.length) {
+            const tlCards = gsap.timeline({
+              scrollTrigger: scrub(pair, "top 48%"),
             });
-          });
+            cards.forEach((card, i) => {
+              const rot = Number(card.dataset.rotate ?? 0);
+              const dir = Number(card.dataset.dir ?? -1);
+              gsap.set(card, { opacity: 0, x: 26 * dir, rotate: 0 });
+              tlCards.to(
+                card,
+                {
+                  opacity: 1,
+                  x: 0,
+                  rotate: rot,
+                  ease: EASE_SETTLE,
+                  duration: 1,
+                },
+                i * 0.35
+              );
+            });
+          }
         });
       });
 
@@ -325,7 +344,7 @@ export function TimelineSection() {
             </div>
 
             {/* Foto polaroid — di area kanan garis, gaya per milestone */}
-            <div style={{ marginLeft: "13%" }}>
+            <div className="js-polaroids" style={{ marginLeft: "13%" }}>
               <Polaroids
                 photos={n.photos}
                 pair={PAIR_STYLES[i] ?? PAIR_STYLES[0]}
