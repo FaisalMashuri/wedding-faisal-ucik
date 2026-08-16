@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 import { fluid } from "@/lib/fluid";
+import { useReveal, REVEAL } from "@/hooks/useReveal";
 
 /**
  * Outro section — penutup, full satu layar.
@@ -11,9 +14,13 @@ import { fluid } from "@/lib/fluid";
  */
 export function OutroSection() {
   const { couple, message, disclaimer } = wedding.outro;
+  const scope = useReveal<HTMLElement>();
 
   return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#414341]">
+    <section
+      ref={scope}
+      className="relative flex w-full items-center justify-center overflow-hidden bg-[#414341]"
+    >
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-outro-fix.webp"
@@ -26,7 +33,7 @@ export function OutroSection() {
 
         {/* Konten — di tengah container */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center text-white">
-          <h2 className="font-serif text-[30px] leading-none drop-shadow">
+          <h2 className={`${REVEAL} font-serif text-[30px] leading-none drop-shadow`}>
             {couple}
           </h2>
 
@@ -35,7 +42,7 @@ export function OutroSection() {
               rasio sama, jadi pola pemenggalan barisnya identik di semua
               lebar layar. */}
           <p
-            className="font-sans leading-relaxed text-white/90 drop-shadow"
+            className={`${REVEAL} font-sans leading-relaxed text-white/90 drop-shadow`}
             style={{
               marginTop: fluid(20),
               fontSize: fluid(21, 0.7),
@@ -48,8 +55,11 @@ export function OutroSection() {
 
         {/* Disclaimer amplop — teks HTML di bawah, gaya mengikuti mock
             (sans bold, rata kiri, nempel bawah, drop-shadow biar terbaca). */}
+        {/* REVEAL langsung di elemennya — jangan dibungkus: dia `absolute`
+            dengan left/right/bottom, pembungkus ber-transform akan jadi
+            containing block-nya dan menggeser posisinya. */}
         <p
-          className="absolute font-sans font-bold leading-snug text-white drop-shadow"
+          className={`${REVEAL} absolute font-sans font-bold leading-snug text-white drop-shadow`}
           style={{
             left: fluid(24),
             right: fluid(24),
