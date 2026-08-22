@@ -69,9 +69,46 @@ const cormorantGaramond = Cormorant_Garamond({
   weight: ["300", "400", "500", "600"],
 });
 
+const siteTitle = `The Wedding Of ${wedding.coupleShort}`;
+const siteDescription = "Undangan pernikahan";
+
 export const metadata: Metadata = {
-  title: `The Wedding Of ${wedding.coupleShort}`,
-  description: "Undangan pernikahan",
+  /**
+   * WAJIB ada begitu metadata memakai path relatif (og:image di bawah lewat
+   * konvensi file `opengraph-image.png`): di Next 16 path relatif tanpa
+   * metadataBase itu error saat build, bukan sekadar peringatan. Scraper
+   * WhatsApp/Facebook juga hanya mau URL absolut.
+   *
+   * Selalu tunjuk URL produksi, termasuk saat deploy preview — kartu preview
+   * yang tersebar di WhatsApp harus menunjuk ke domain yang benar.
+   */
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://wedding-faisal-ucik.vercel.app"
+  ),
+  title: siteTitle,
+  description: siteDescription,
+  /**
+   * Kartu preview saat tautan disebar (WhatsApp, Telegram, dsb.).
+   *
+   * Gambarnya diambil otomatis dari `src/app/opengraph-image.png` — konvensi
+   * file Next, yang sekaligus memancarkan og:image:width/height/type. File itu
+   * PNG dan BUKAN WebP karena dua alasan: konvensi ini cuma menerima
+   * jpg/jpeg/png/gif, dan scraper WhatsApp kerap gagal merender WebP.
+   * Latarnya juga sudah di-flatten ke cream — icon.png aslinya transparan, dan
+   * transparansi biasanya jadi kotak hitam di kartu preview.
+   *
+   * Tanpa blok ini halaman tidak memancarkan og:* sama sekali; yang muncul di
+   * iPhone selama ini cuma apple-icon.png, hasil fallback khas iOS yang tidak
+   * dimiliki WhatsApp Android maupun WhatsApp Web.
+   */
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "/",
+    siteName: siteTitle,
+    title: siteTitle,
+    description: siteDescription,
+  },
   formatDetection: {
     telephone: false,
     address: false,
