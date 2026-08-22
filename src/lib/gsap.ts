@@ -55,12 +55,6 @@ export function getScroller(): HTMLElement | null {
    supaya seluruh situs terasa satu suara. */
 export const EASE = "power2.out";
 export const EASE_SETTLE = "power3.out";
-/**
- * EASE yang sama dalam bentuk cubic-bezier, untuk yang bukan GSAP (Motion).
- * Ditaruh di sini supaya kurva gerak situs ini punya satu sumber kebenaran.
- * Tuple, bukan `as const`: readonly array tidak memenuhi tipe Easing Motion.
- */
-export const EASE_CSS: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 export const RISE = 20; // px — jarak naik saat muncul
 export const DUR = 0.6; // detik
 export const STAGGER = 0.09; // jeda antar elemen bersaudara
@@ -78,9 +72,9 @@ export const REVEAL_START = `top ${REVEAL_START_PCT}%`;
 
 /**
  * Patokan cadangan untuk elemen yang TIDAK PERNAH bisa mencapai garis di atas:
- * yang duduk di dasar section terakhir (mis. disclaimer Outro) berhenti jauh
- * di bawah 88% karena halaman sudah mentok. Tanpa ini mereka tidak pernah
- * muncul sama sekali. Dipilih otomatis di useReveal, bukan disetel manual.
+ * yang duduk di dasar halaman berhenti jauh di bawah 88% karena guliran sudah
+ * mentok. Tanpa ini mereka tidak pernah muncul sama sekali. Dipilih otomatis
+ * di useReveal, bukan disetel manual.
  */
 export const REVEAL_START_FALLBACK = "top bottom";
 

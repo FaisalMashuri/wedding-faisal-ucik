@@ -161,9 +161,9 @@ export function TimelineSection() {
         /* Seluruh isi timeline di-SCRUB, bukan sekali-jalan.
            Progres animasinya diikat ke posisi scroll: digulir setengah, ia
            berhenti di setengah dan bertahan di situ; digulir naik, ia mundur
-           proporsional. Ini beda dari empat section lain yang sengaja tetap
-           sekali-jalan — di sini gerakannya jadi seirama dengan garis emas
-           yang memang sudah scrub sejak awal.
+           proporsional. Ini beda dari Hero yang sengaja tetap sekali-jalan —
+           di sini gerakannya jadi seirama dengan garis emas yang memang sudah
+           scrub sejak awal.
 
            `end` menentukan sepanjang berapa guliran animasi itu terbentang;
            makin jauh dari `start`, makin lambat dan makin terasa "ketahan". */

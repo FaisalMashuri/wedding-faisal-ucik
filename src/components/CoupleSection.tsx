@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 import { fluid as fluidBase } from "@/lib/fluid";
-import { useReveal, REVEAL } from "@/hooks/useReveal";
 
 // Skala murni proporsional (tanpa floor minRatio): konten section ini harus
 // selalu presisi di dalam kotak putih yang tercetak di bg-couple.webp —
@@ -108,13 +107,9 @@ function Person({
 export function CoupleSection() {
   const { bride, groom } = wedding.couple;
   const d = wedding.saveTheDate;
-  const scope = useReveal<HTMLElement>();
 
   return (
-    <section
-      ref={scope}
-      className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]"
-    >
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#30535d]">
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-couple.webp"
@@ -131,7 +126,7 @@ export function CoupleSection() {
           style={{ paddingTop: fluid(132), paddingLeft: fluid(32), paddingRight: fluid(32) }}
         >
           <p
-            className={`${REVEAL} font-sans font-bold leading-snug text-primary-dark`}
+            className="font-sans font-bold leading-snug text-primary-dark"
             style={{ fontSize: fluid(21) }}
           >
             You are Invited to
@@ -139,24 +134,24 @@ export function CoupleSection() {
             The Wedding of:
           </p>
 
-          <div className={REVEAL} style={{ marginTop: fluid(40) }}>
+          <div style={{ marginTop: fluid(40) }}>
             <Person p={bride} />
           </div>
 
           <p
-            className={`${REVEAL} font-script leading-none text-secondary`}
+            className="font-script leading-none text-secondary"
             style={{ fontSize: fluid(34), marginTop: fluid(12), marginBottom: fluid(12) }}
           >
             &amp;
           </p>
 
-          <div className={REVEAL} style={{ marginBottom: fluid(40) }}>
+          <div style={{ marginBottom: fluid(40) }}>
             <Person p={groom} />
           </div>
 
           {/* Save the date — polos, ketebalan regular (sama seperti Sat/Sept) */}
           <p
-            className={`${REVEAL} font-serif leading-none text-secondary`}
+            className="font-serif leading-none text-secondary"
             style={{ fontSize: fluid(20), marginTop: fluid(16) }}
           >
             Save the date
@@ -166,7 +161,7 @@ export function CoupleSection() {
               dan gap dihitung agar bentang total (teks 145.3 + pembatas 2 +
               4 gap) pas sama bentang nama "Faisal Mashuri" (215.3px) */}
           <div
-            className={`${REVEAL} flex items-center text-secondary`}
+            className="flex items-center text-secondary"
             style={{ marginTop: fluid(8), gap: fluid(17) }}
           >
             <span style={{ fontSize: fluid(28) }}>{d.day}</span>
@@ -188,7 +183,7 @@ export function CoupleSection() {
           </div>
 
           <p
-            className={`${REVEAL} font-sans font-bold text-secondary`}
+            className="font-sans font-bold text-secondary"
             style={{ fontSize: fluid(15), marginTop: fluid(6) }}
           >
             {d.year} at 09:30 a.m

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useOnboardingStore } from "@/store/onboarding";
 import { gsap, useGSAP, ensureGsap, ScrollTrigger, EASE } from "@/lib/gsap";
-import { MotionProvider } from "@/components/motion/MotionProvider";
 import { ContentGuard } from "@/components/ContentGuard";
 import { EnvelopeLoader } from "@/components/EnvelopeLoader";
 import { HeroSection } from "@/components/HeroSection";
@@ -151,19 +150,15 @@ export default function Home() {
         id="invite-scroll"
         className={`no-scrollbar h-full ${opened ? "overflow-y-auto" : "overflow-hidden"}`}
       >
-        {/* MotionProvider hanya membungkus section, bukan seluruh halaman:
-            chunk fitur Motion baru mulai diunduh saat blok ini mount — yaitu
-            setelah loader amplop selesai — jadi nol beban di jalur kritis.
-            Loader & onboarding murni GSAP/CSS, tidak butuh Motion. */}
         {sectionsReady && (
-          <MotionProvider>
+          <>
             <HeroSection />
             <CoupleSection />
             <EventSection />
             <TimelineSection />
             <RsvpSection />
             <OutroSection />
-          </MotionProvider>
+          </>
         )}
       </div>
 

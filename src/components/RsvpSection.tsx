@@ -1,14 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence } from "motion/react";
-import * as m from "motion/react-m";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { fluid } from "@/lib/fluid";
 import { useOnboardingStore } from "@/store/onboarding";
-import { useReveal, REVEAL } from "@/hooks/useReveal";
-import { EASE_CSS } from "@/lib/gsap";
 
 type Wish = { id: number; name: string; message: string };
 
@@ -46,7 +42,6 @@ const PAGE_SIZE = 8;
  * Submit & baca -> tabel `rsvps` di Supabase (lihat supabase/rsvps.sql).
  */
 export function RsvpSection() {
-  const scope = useReveal<HTMLElement>();
   const guestName = useOnboardingStore((s) => s.guestName);
   // Input nama disabled dan selalu mengikuti nama tamu (?to=) — cukup
   // diturunkan langsung dari store, tidak perlu state + effect sinkronisasi.
@@ -205,10 +200,7 @@ export function RsvpSection() {
   } as const;
 
   return (
-    <section
-      ref={scope}
-      className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]"
-    >
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
       <div className="relative w-full aspect-[9/16]">
         <Image
           src="/images/bg-rsvp.webp"
@@ -221,14 +213,14 @@ export function RsvpSection() {
 
         {/* Konten memenuhi frame; daftar ucapan scroll internal */}
         <div className="absolute inset-0 flex flex-col px-5 py-6">
-          <h2 className={`${REVEAL} text-center font-serif text-[26px] text-secondary`}>
+          <h2 className="text-center font-serif text-[26px] text-secondary">
             RSVP &amp; Wishes
           </h2>
 
           {/* Kartu form — kotak olive bergaris tepi emas, field putih pill */}
           <form
             onSubmit={handleSubmit}
-            className={`${REVEAL} mt-3 flex shrink-0 flex-col border border-primary-dark/70 bg-primary/85 shadow-sm`}
+            className="mt-3 flex shrink-0 flex-col border border-primary-dark/70 bg-primary/85 shadow-sm"
             style={{
               borderRadius: fluid(18),
               padding: fluid(24),
@@ -313,31 +305,24 @@ export function RsvpSection() {
                 gap: fluid(10),
               }}
             >
-              {/* Hanya opacity + y. JANGAN animasikan `height` dan jangan
-                  pakai prop `layout`: baris ini ditata khusus (lihat komentar
-                  di atas) supaya tinggi kartu form tidak ikut berubah. */}
               {status && (
-                <m.p
+                <p
                   role="status"
                   aria-live="polite"
                   className={`flex-1 text-left font-sans leading-snug ${
                     status.kind === "ok" ? "text-secondary" : "text-[#8e2318]"
                   }`}
                   style={{ fontSize: fluid(11) }}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, ease: EASE_CSS }}
                 >
                   {status.text}
-                </m.p>
+                </p>
               )}
-              {/* Tombol punya width & height tetap, jadi mode="wait" aman —
-                  label berganti tanpa menggeser apa pun. */}
-              <m.button
+              {/* Width & height tombol dikunci: labelnya berganti
+                  ("Send" -> "..." -> "✓ Terkirim") tanpa menggeser apa pun. */}
+              <button
                 type="submit"
                 disabled={sending}
-                whileTap={{ scale: 0.97 }}
-                className="relative shrink-0 overflow-hidden bg-white font-sans text-secondary transition-colors hover:bg-white/80 disabled:opacity-60"
+                className="shrink-0 bg-white font-sans text-secondary transition-colors hover:bg-white/80 disabled:opacity-60"
                 style={{
                   width: fluid(112),
                   height: fluid(34),
@@ -345,23 +330,8 @@ export function RsvpSection() {
                   fontSize: fluid(14),
                 }}
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  <m.span
-                    key={sending ? "sending" : status?.kind === "ok" ? "ok" : "idle"}
-                    className="absolute inset-0 flex items-center justify-center"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.22, ease: EASE_CSS }}
-                  >
-                    {sending
-                      ? "..."
-                      : status?.kind === "ok"
-                        ? "✓ Terkirim"
-                        : "Send"}
-                  </m.span>
-                </AnimatePresence>
-              </m.button>
+                {sending ? "..." : status?.kind === "ok" ? "✓ Terkirim" : "Send"}
+              </button>
             </div>
           </form>
 
@@ -371,26 +341,13 @@ export function RsvpSection() {
             onScroll={handleListScroll}
             className="no-scrollbar mt-3 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto pr-1 pt-8"
           >
-            {/* Sengaja TANPA AnimatePresence dan TANPA prop `layout`:
-                opacity + y murni transform, jadi kotak layout kartu tidak
-                berubah dan sentinel di bawah tidak pernah bergeser — kalau
-                bergeser, IntersectionObserver-nya bisa terpicu berulang dan
-                memuat seluruh tabel sekaligus.
-                `key={w.id}` stabil: loadPage(true) setelah submit merender
-                ulang baris lama tanpa remount, jadi yang beranimasi hanya
-                ucapan yang benar-benar baru. Jeda dibatasi per halaman
-                (i % PAGE_SIZE) supaya tidak menumpuk di halaman ke-5. */}
-            {wishes.map((w, i) => (
-              <m.div
+            {/* `key={w.id}` stabil: loadPage(true) setelah submit merender
+                ulang baris lama tanpa remount, jadi kartu yang sudah ada
+                tidak ikut berkedip saat ucapan baru masuk. */}
+            {wishes.map((w) => (
+              <div
                 key={w.id}
                 className="shrink-0 rounded-xl bg-white p-3 shadow-sm"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.45,
-                  ease: EASE_CSS,
-                  delay: (i % PAGE_SIZE) * 0.05,
-                }}
               >
                 <p className="font-sans text-[13px] font-bold text-secondary">
                   {w.name}
@@ -399,7 +356,7 @@ export function RsvpSection() {
                 <p className="mt-1.5 whitespace-pre-line font-sans text-[10px] leading-relaxed text-secondary/70">
                   {w.message}
                 </p>
-              </m.div>
+              </div>
             ))}
 
             {/* Sentinel infinite scroll — memicu muat halaman berikutnya.
@@ -415,10 +372,9 @@ export function RsvpSection() {
                 {[0, 1, 2].map((i) => (
                   <span
                     key={i}
-                    className={`block h-1.5 w-1.5 rounded-full bg-secondary/60 transition-opacity duration-300 motion-safe:animate-bounce ${
+                    className={`block h-1.5 w-1.5 rounded-full bg-secondary/60 transition-opacity duration-300 ${
                       loadingMore ? "opacity-100" : "opacity-30"
                     }`}
-                    style={{ animationDelay: `${i * 0.15}s` }}
                   />
                 ))}
                 <span className="sr-only">
