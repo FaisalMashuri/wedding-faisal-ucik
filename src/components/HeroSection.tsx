@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
+import { useOnboardingStore } from "@/store/onboarding";
+import { useReveal, REVEAL } from "@/hooks/useReveal";
 
 /**
  * Hero section — layar pembuka undangan, full satu layar (h-dvh).
@@ -8,8 +12,24 @@ import { wedding } from "@/config/wedding";
  * memakai warna tepi gambar (#E8E8E0) agar menyatu.
  */
 export function HeroSection() {
+  // Hero di-mount saat loader amplop selesai — jauh SEBELUM tamu menekan
+  // "Buka Undangan". Karena section ini sudah berada di dalam viewport,
+  // reveal-nya langsung terpicu dan habis dimainkan di balik layar
+  // onboarding yang masih menutupi penuh; tamu tidak pernah melihatnya.
+  // Jadi baru dipasang saat `opened`, bukan saat mount.
+  const opened = useOnboardingStore((s) => s.opened);
+
+  // 0.6s dihitung dari transisi layar onboarding yang terangkat selama 850ms
+  // (lihat page.tsx): pada ~0.6s tirainya sudah lewat area teks Hero, jadi
+  // teks mulai naik tepat setelah tempatnya tersingkap — bukan sebelumnya
+  // (tertutup) dan bukan lama setelahnya (terasa menggantung).
+  const scope = useReveal<HTMLElement>({ enabled: opened, delay: 0.6 });
+
   return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]">
+    <section
+      ref={scope}
+      className="relative flex w-full items-center justify-center overflow-hidden bg-[#e8e8e0]"
+    >
       {/* Kotak dikunci rasio 9:16 = rasio asli gambar (diukur dari lebar),
           jadi gambar tampil utuh & teks bisa diposisikan akurat relatif
           terhadap area putih di desain. */}
@@ -50,18 +70,24 @@ export function HeroSection() {
             tengah frame, jadi blok teks ikut digeser agar pas di tengahnya. */}
         <div className="absolute inset-x-0 top-[50.5%] [--px:calc(100cqw/480)] translate-x-[calc(5*var(--px))] px-[calc(8*var(--px))] text-secondary">
           {/* Inisial pasangan — Alice */}
-          <p className="text-center font-serif text-[calc(28*var(--px))] tracking-[0.05em]">
+          <p
+            className={`${REVEAL} text-center font-serif text-[calc(28*var(--px))] tracking-[0.05em]`}
+          >
             {wedding.initials}
           </p>
 
           {/* Kutipan — Montserrat, rata kanan-kiri.
               max-w 247 + text 12 (skala desain) = 7 baris, sama persis dgn desain. */}
-          <p className="mx-auto mt-[calc(30*var(--px))] max-w-[calc(247*var(--px))] text-justify font-sans text-[calc(12*var(--px))] font-bold leading-[1.25]">
+          <p
+            className={`${REVEAL} mx-auto mt-[calc(30*var(--px))] max-w-[calc(247*var(--px))] text-justify font-sans text-[calc(12*var(--px))] font-bold leading-[1.25]`}
+          >
             &ldquo;{wedding.quote}&rdquo;
           </p>
 
           {/* Sumber kutipan — script */}
-          <p className="mt-[calc(12*var(--px))] mr-[calc(100*var(--px))] text-right font-script text-[calc(15*var(--px))] leading-none text-secondary/90">
+          <p
+            className={`${REVEAL} mt-[calc(12*var(--px))] mr-[calc(100*var(--px))] text-right font-script text-[calc(15*var(--px))] leading-none text-secondary/90`}
+          >
             {wedding.quoteSource}
           </p>
         </div>

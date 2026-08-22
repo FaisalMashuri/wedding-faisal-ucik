@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 import { fluid } from "@/lib/fluid";

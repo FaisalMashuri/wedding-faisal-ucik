@@ -18,8 +18,11 @@ const pad = (n: number) => String(n).padStart(2, "0");
 function Unit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center" style={{ width: fluid(36) }}>
+      {/* Kotak angka: tingginya dikunci supaya baris label di bawahnya tidak
+          bergeser saat angka berganti. JANGAN tambahkan overflow-hidden
+          "biar rapi" — font 21px di dalam kotak 24px akan terpotong. */}
       <div
-        className="flex items-center font-[family-name:var(--font-counter)] leading-none text-secondary"
+        className="flex w-full items-center justify-center font-[family-name:var(--font-counter)] leading-none text-secondary"
         style={{ height: fluid(24), fontSize: fluid(21) }}
       >
         {pad(value)}

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
 import { Countdown } from "./Countdown";

@@ -66,17 +66,6 @@ body {
    ANIMASI ONBOARDING (entrance saat load pertama)
    ===================================================================== */
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(1.5rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes ken-burns {
   from {
     transform: scale(1.18);
@@ -96,75 +85,10 @@ body {
   }
 }
 
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Ring monogram muncul: mengecil → normal + fade */
-@keyframes ring-in {
-  from {
-    opacity: 0;
-    transform: scale(0.82);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Kilau emas menyapu teks nama */
-@keyframes shimmer-gold {
-  0% {
-    background-position: 180% 0;
-  }
-  100% {
-    background-position: -80% 0;
-  }
-}
-
-/* Elemen mulai tersembunyi, lalu muncul naik-halus */
-.anim-fade-up {
-  opacity: 0;
-  animation: fade-up 1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
 .anim-ken-burns {
   animation: ken-burns 9s ease-out both;
   transform-origin: center;
   will-change: transform;
-}
-
-.anim-overlay {
-  animation: overlay-in 1.4s ease-out both;
-}
-
-/* Ring: masuk sekali (mengecil→normal), lalu glow lembut berulang */
-.anim-ring {
-  animation:
-    ring-in 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both,
-    soft-glow 3s ease-in-out 0.9s infinite;
-}
-
-.shimmer-gold {
-  background: linear-gradient(
-    100deg,
-    #b8ac5f 0%,
-    #d6cc89 38%,
-    #fff6d6 50%,
-    #d6cc89 62%,
-    #b8ac5f 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer-gold 3.2s ease-in-out infinite;
 }
 
 .anim-glow {
@@ -241,13 +165,13 @@ body {
   );
 }
 
-/* Jeda semua animasi CSS di dalam subtree — dipakai overlay onboarding
-   selama loader amplop tampil, agar tidak berebut main thread. */
-.anims-paused,
-.anims-paused *,
-.anims-paused *::before,
-.anims-paused *::after {
-  animation-play-state: paused !important;
+/* Padanan klik-kanan di ponsel adalah tahan-lama pada gambar. Android
+   memicu event `contextmenu` (ditangani ContentGuard), tapi iOS Safari
+   memunculkan menu "Save Image" tanpa event apa pun — hanya properti ini
+   yang menahannya. Sengaja cuma di <img>: kalau dipasang global, tamu tidak
+   bisa lagi tahan-lama untuk menempel teks di kolom ucapan. */
+img {
+  -webkit-touch-callout: none;
 }
 
 /* Sembunyikan scrollbar tapi tetap bisa discroll (semua browser) */
@@ -260,25 +184,16 @@ body {
   display: none; /* Chrome/Safari/Edge baru */
 }
 
-/* Hormati preferensi kurangi-gerak */
+/* Hormati preferensi kurangi-gerak.
+   Blok ini kini hanya menutup animasi yang MASIH berupa CSS. Sisanya sudah
+   pindah ke GSAP (dibungkus gsap.matchMedia) dan Motion (MotionConfig
+   reducedMotion="user"), yang menanganinya sendiri. */
 @media (prefers-reduced-motion: reduce) {
-  .anim-fade-up,
   .anim-ken-burns,
-  .anim-overlay,
   .anim-glow {
     animation: none;
     opacity: 1;
     transform: none;
-  }
-
-  .anim-ring {
-    animation: none;
-  }
-
-  .shimmer-gold {
-    animation: none;
-    color: var(--color-primary);
-    -webkit-text-fill-color: var(--color-primary);
   }
 
   .anim-shine::after {

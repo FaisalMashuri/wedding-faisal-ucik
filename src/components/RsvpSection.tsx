@@ -317,10 +317,12 @@ export function RsvpSection() {
                   {status.text}
                 </p>
               )}
+              {/* Width & height tombol dikunci: labelnya berganti
+                  ("Send" -> "..." -> "✓ Terkirim") tanpa menggeser apa pun. */}
               <button
                 type="submit"
                 disabled={sending}
-                className="shrink-0 bg-white font-sans text-secondary transition hover:bg-white/80 disabled:opacity-60"
+                className="shrink-0 bg-white font-sans text-secondary transition-colors hover:bg-white/80 disabled:opacity-60"
                 style={{
                   width: fluid(112),
                   height: fluid(34),
@@ -328,7 +330,7 @@ export function RsvpSection() {
                   fontSize: fluid(14),
                 }}
               >
-                {sending ? "..." : "Send"}
+                {sending ? "..." : status?.kind === "ok" ? "✓ Terkirim" : "Send"}
               </button>
             </div>
           </form>
@@ -339,8 +341,14 @@ export function RsvpSection() {
             onScroll={handleListScroll}
             className="no-scrollbar mt-3 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto pr-1 pt-8"
           >
+            {/* `key={w.id}` stabil: loadPage(true) setelah submit merender
+                ulang baris lama tanpa remount, jadi kartu yang sudah ada
+                tidak ikut berkedip saat ucapan baru masuk. */}
             {wishes.map((w) => (
-              <div key={w.id} className="shrink-0 rounded-xl bg-white p-3 shadow-sm">
+              <div
+                key={w.id}
+                className="shrink-0 rounded-xl bg-white p-3 shadow-sm"
+              >
                 <p className="font-sans text-[13px] font-bold text-secondary">
                   {w.name}
                 </p>
@@ -364,10 +372,9 @@ export function RsvpSection() {
                 {[0, 1, 2].map((i) => (
                   <span
                     key={i}
-                    className={`block h-1.5 w-1.5 rounded-full bg-secondary/60 transition-opacity duration-300 motion-safe:animate-bounce ${
+                    className={`block h-1.5 w-1.5 rounded-full bg-secondary/60 transition-opacity duration-300 ${
                       loadingMore ? "opacity-100" : "opacity-30"
                     }`}
-                    style={{ animationDelay: `${i * 0.15}s` }}
                   />
                 ))}
                 <span className="sr-only">
