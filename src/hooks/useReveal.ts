@@ -20,10 +20,17 @@ import {
 export const REVEAL = "js-reveal";
 
 type Options = {
-  /** Jeda sebelum rangkaian mulai (Hero perlu ini, menunggu cover loader larut). */
+  /** Jeda sebelum rangkaian mulai (Hero perlu ini, menunggu cover onboarding naik). */
   delay?: number;
   /** Titik picu, mis. "top 70%" kalau elemen perlu muncul lebih awal. */
   start?: string;
+  /**
+   * Selama `false`, hook TIDAK menyentuh apa pun — elemen dibiarkan di posisi
+   * normalnya, tidak disembunyikan dan tidak dipasangi trigger. Dipakai Hero:
+   * section-nya sudah mount di balik layar onboarding, jadi tanpa gerbang ini
+   * reveal-nya habis dimainkan sementara tamu belum melihat apa-apa.
+   */
+  enabled?: boolean;
   dependencies?: unknown[];
 };
 
@@ -49,13 +56,13 @@ type Options = {
  * pernah jalan sama sekali, jadi elemen langsung tampil di posisi normalnya.
  */
 export function useReveal<T extends HTMLElement>(opts: Options = {}) {
-  const { delay = 0, start = REVEAL_START, dependencies } = opts;
+  const { delay = 0, start = REVEAL_START, enabled = true, dependencies } = opts;
   const scope = useRef<T>(null);
 
   useGSAP(
     () => {
       const root = scope.current;
-      if (!root) return;
+      if (!root || !enabled) return;
       ensureGsap();
 
       const mm = gsap.matchMedia();
@@ -123,7 +130,9 @@ export function useReveal<T extends HTMLElement>(opts: Options = {}) {
 
       return () => mm.revert();
     },
-    { scope, dependencies }
+    // `enabled` ikut jadi dependency: saat ia berubah false -> true, useGSAP
+    // menjalankan ulang callback ini, dan di situlah reveal-nya baru dipasang.
+    { scope, dependencies: [enabled, ...(dependencies ?? [])] }
   );
 
   return scope;

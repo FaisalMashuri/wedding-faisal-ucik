@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { wedding } from "@/config/wedding";
+import { useOnboardingStore } from "@/store/onboarding";
 import { useReveal, REVEAL } from "@/hooks/useReveal";
 
 /**
@@ -11,10 +12,18 @@ import { useReveal, REVEAL } from "@/hooks/useReveal";
  * memakai warna tepi gambar (#E8E8E0) agar menyatu.
  */
 export function HeroSection() {
-  // delay 0.2s: saat section di-mount, Hero SUDAH berada di dalam viewport,
-  // jadi reveal-nya langsung terpicu. Beri jeda supaya tidak bertabrakan
-  // dengan cover amplop yang masih larut di detik-detik terakhir loader.
-  const scope = useReveal<HTMLElement>({ delay: 0.2 });
+  // Hero di-mount saat loader amplop selesai — jauh SEBELUM tamu menekan
+  // "Buka Undangan". Karena section ini sudah berada di dalam viewport,
+  // reveal-nya langsung terpicu dan habis dimainkan di balik layar
+  // onboarding yang masih menutupi penuh; tamu tidak pernah melihatnya.
+  // Jadi baru dipasang saat `opened`, bukan saat mount.
+  const opened = useOnboardingStore((s) => s.opened);
+
+  // 0.6s dihitung dari transisi layar onboarding yang terangkat selama 850ms
+  // (lihat page.tsx): pada ~0.6s tirainya sudah lewat area teks Hero, jadi
+  // teks mulai naik tepat setelah tempatnya tersingkap — bukan sebelumnya
+  // (tertutup) dan bukan lama setelahnya (terasa menggantung).
+  const scope = useReveal<HTMLElement>({ enabled: opened, delay: 0.6 });
 
   return (
     <section
