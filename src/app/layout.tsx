@@ -70,7 +70,10 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 const siteTitle = `The Wedding Of ${wedding.coupleShort}`;
-const siteDescription = "Undangan pernikahan";
+const siteDescription =
+  `Undangan Pernikahan ${wedding.coupleShort}. Simak detail acara, lokasi, ` +
+  `waktu, dan kisah cinta kami. Mohon doa restu serta kehadiran Anda di hari ` +
+  `bahagia kami.`;
 
 export const metadata: Metadata = {
   /**
