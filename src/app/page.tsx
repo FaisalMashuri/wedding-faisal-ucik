@@ -12,6 +12,7 @@ import { EventSection } from "@/components/EventSection";
 import { TimelineSection } from "@/components/TimelineSection";
 import { RsvpSection } from "@/components/RsvpSection";
 import { OutroSection } from "@/components/OutroSection";
+import { MusicToggle } from "@/components/MusicToggle";
 import { wedding } from "@/config/wedding";
 
 /*
@@ -142,6 +143,10 @@ export default function Home() {
       {/* Backsound — preload="none" karena file-nya sudah dihangatkan ke cache
           di layar loader; elemen ini cukup ambil dari sana saat diputar. */}
       <audio ref={audioRef} src={wedding.backsound} loop preload="none" />
+
+      {/* Tombol mute/unmute — mengambang di pojok kanan bawah, muncul begitu
+          undangan dibuka. */}
+      <MusicToggle audioRef={audioRef} visible={opened} />
 
       {/* Halaman undangan — scrollable, terkunci sampai onboarding dibuka.
           `id` dipakai ScrollTrigger sebagai `scroller`: yang bergerak di sini
