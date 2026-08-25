@@ -8,6 +8,7 @@ import {
   Cormorant_Garamond,
 } from "next/font/google";
 import localFont from "next/font/local";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { wedding } from "@/config/wedding";
 import "./globals.css";
 
@@ -146,6 +147,7 @@ export default function RootLayout({
         <div className="relative flex h-dvh w-full max-w-[480px] flex-col overflow-hidden bg-cream shadow-2xl ring-1 ring-white/10">
           {children}
         </div>
+        <SpeedInsights />
       </body>
     </html>
   );
